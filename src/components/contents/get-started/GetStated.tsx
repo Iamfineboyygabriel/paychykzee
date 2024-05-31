@@ -10,8 +10,8 @@ const GetStarted = () => {
   return (
     <div>
       <main className="w-full  font-br-regular">
-        <section className="ml-auto flex w-[90%] justify-between">
-          <div className="w-[27%] pt-[3.5em]">
+        <section className="ml-auto flex w-[90%] flex-col justify-between lg:flex-row">
+          <div className="w-full lg:w-[27%] lg:pt-[3.5em]">
             <header className="mt-[1.7em]">
               <h1 className="gradient-text font-br-bold text-3xl">
                 Get Started

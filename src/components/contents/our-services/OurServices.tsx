@@ -10,14 +10,14 @@ const OurServices = () => {
             Our Services
           </header>
         </div>
-        <div className="mt-[3em] flex justify-between text-text">
-          <section className="flex w-[45%] flex-col">
+        <div className="mt-[3em] flex flex-col justify-between gap-[2em] text-text lg:flex-row">
+          <section className="flex flex-col lg:w-[45%]">
             <div>
               <img src={money} alt="exchangeimage" />
             </div>
-            <article className="mt-[1.5em] w-[72%]">
+            <article className="mt-[1.5em]">
               <header>
-                <h1 className="leading-11 text-center font-br-semibold text-3xl md:text-left">
+                <h1 className="leading-11 font-br-semibold text-3xl md:text-left ">
                   Peer to Peer Currency Exchange Service
                 </h1>
               </header>
@@ -37,14 +37,14 @@ const OurServices = () => {
               </div>
             </article>
           </section>
-          <section className="flex w-[45%] flex-col">
+          <section className="flex flex-col lg:w-[45%]">
             <div>
               <img src={calculator} alt="exchangeimage" />
             </div>
-            <article className="mt-[1.5em] w-[65%]">
+            <article className="mt-[1.5em]">
               <header>
-                <h1 className="leading-11 space-x-5 text-center font-br-semibold text-4xl md:text-left">
-                  Outsourced Bill Payment
+                <h1 className="leading-11  space-x-5 font-br-semibold text-4xl md:text-left ">
+                  Outsourced Bill Payment Services
                 </h1>
               </header>
               <div className="mt-[1.5em] font-br-light leading-8">
