@@ -4,22 +4,24 @@ import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
   const navigate = useNavigate();
-  const SignUp = () => {
+
+  const signUp = () => {
     navigate("/sign-up");
   };
+
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center bg-hero-pattern bg-cover font-br-regular">
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-hero-pattern bg-cover font-br-regular">
       <section className="w-full text-center md:w-[60%]">
-        <article className="gradient-border m-auto mt-[3em] flex w-full justify-center rounded-lg py-3 text-center  lg:mt-[13em] lg:w-[50%]">
+        <article className="gradient-border m-auto mt-[4em] flex w-full justify-center rounded-lg py-3 text-center lg:mt-[9em] lg:w-[50%]">
           <p className="font-br-semibold text-text">
             Seamless currency exchange at your fingertips
           </p>
         </article>
-        <header className="mt-[2em]">
-          <h1 className="gradient-text font-br-bold text-[2em] lg:text-[4em]">
+        <header>
+          <h1 className="gradient-text font-br-bold text-[2em] sm:text-[3em] lg:text-[4em]">
             Welcome
           </h1>
-          <h1 className="gradient-text font-br-bold text-[2em] lg:text-[4em]">
+          <h1 className="gradient-text font-br-bold text-[2em] sm:text-[3em] lg:text-[4em]">
             to Pay ChyKzee
           </h1>
         </header>
@@ -31,18 +33,14 @@ const HeroSection = () => {
           </p>
         </article>
         <div className="mt-[2em]">
-          <button.PrimaryButton onClick={SignUp} className="text-text">
+          <button.PrimaryButton onClick={signUp} className="text-text">
             Create account
           </button.PrimaryButton>
         </div>
-        <div className="mt-[2em] flex w-full justify-center">
-          <img
-            src={card}
-            alt="hero-card"
-            className="h-auto w-full max-w-xs sm:max-w-sm md:max-w-md lg:h-full lg:w-full lg:max-w-none"
-          />
-        </div>
       </section>
+      <div className=" bottom-0 left-0 mt-[4.5em] flex w-full justify-center">
+        <img src={card} alt="hero-card" />
+      </div>
     </main>
   );
 };
