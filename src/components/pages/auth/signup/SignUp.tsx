@@ -72,7 +72,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                 <input
                   name="firstName"
                   id="firstName"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-2"
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                 />
               </div>
               <div className="w-full">
@@ -83,7 +83,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                   name="lastName"
                   id="lastName"
                   type="text"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-2"
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                 />
               </div>
             </div>
@@ -96,7 +96,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                 name="email"
                 id="email"
                 type="email"
-                className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-2"
+                className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
               />
             </div>
 
@@ -108,7 +108,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                 <input
                   name="country"
                   id="country"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-2"
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                 />
               </div>
               <div className="w-full">
@@ -119,12 +119,12 @@ const SignUp: React.FC<SignUpProps> = () => {
                   name="phoneNumber"
                   id="phoneNumber"
                   type="number"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-2"
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                 />
               </div>
             </div>
 
-            <div className="mt-[1em] sm:flex-col flex gap-3 lg:flex-row">
+            <div className="mt-[1em] flex gap-3 sm:flex-col lg:flex-row">
               <div className="w-full">
                 <label htmlFor="firstName" className="flex-start flex">
                   Password
@@ -136,7 +136,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                     type={passwordType}
                     value={passwordValue}
                     onChange={handlePasswordChange}
-                    className="mt-[1em] flex w-full  rounded-lg border-[2px] border-border bg-inherit p-2 "
+                    className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
                   />
                   <button
                     type="button"
@@ -162,7 +162,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                     type={passwordType}
                     value={passwordValue}
                     onChange={handlePasswordChange}
-                    className="mt-[1em] flex w-full  rounded-lg border-[2px] border-border bg-inherit p-2 "
+                    className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
                   />
                   <button
                     type="button"

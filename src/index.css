@@ -61,7 +61,6 @@
   background: linear-gradient(to bottom, #4c1ef5, #b81ef5);
 }
 
-
 ::-webkit-scrollbar {
   width: 7px;
   height: 1px;
@@ -78,4 +77,13 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.input-focus-border:focus {
+  border-width: 2px;
+  border-style: solid;
+  border-image: linear-gradient(to right, #4c1ef5, #b81ef5) 1;
+  border-image-slice: 1;
+  border-radius: 5px;
+  background-color: inherit;
 }

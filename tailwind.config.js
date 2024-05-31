@@ -11,7 +11,7 @@ module.exports = {
     },
     extend: {
       backgroundImage: {
-        "hero-pattern": "url('/src/assets/jpg/hero-background.jpg')",
+        "hero-pattern": "url('/src/assets/jpg/hero.png')",
         "peer-background": "url('/src/assets/png/home-ex.png')",
         "outsourced-background": "url('/src/assets/png/2home-exchange.png')",
       },

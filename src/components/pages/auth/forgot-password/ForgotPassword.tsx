@@ -28,7 +28,7 @@ const ForgotPassword = () => {
               type="number"
               name="otp"
               id="otp"
-              className="focus:border-gradient rounded-lg border-2 border-border bg-inherit p-2 focus:outline-none"
+              className="rounded-lg border-2 border-border bg-inherit p-3 focus:border-side focus:outline-none"
             />
           </div>
         </div>

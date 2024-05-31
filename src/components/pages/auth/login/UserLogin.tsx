@@ -62,7 +62,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
           </div>
         </div>
         <section className="flex flex-1 flex-col items-center justify-center rounded-xl bg-dashboard px-4 py-[2em]">
-          <div className="lg:w-[85%] text-center">
+          <div className="text-center lg:w-[85%]">
             <header>
               <h1 className="font-br-regular text-4xl leading-10">Login</h1>
             </header>
@@ -80,7 +80,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
                   <input
                     name="email"
                     id="email"
-                    className="rounded-lg  border-[2px] border-border bg-inherit p-2 focus:border-primary focus:ring-primary"
+                    className="rounded-lg border-[2px]  border-border  bg-inherit p-3 focus:border-side focus:outline-none"
                   />
                 </div>
                 <div className="mt-[1.5em] flex flex-col gap-3">
@@ -94,7 +94,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
                       type={passwordType}
                       value={passwordValue}
                       onChange={handlePasswordChange}
-                      className="w-full items-center rounded-lg border-[2px] border-border bg-inherit p-2"
+                      className=" w-full items-center rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                     />
                     <button
                       type="button"
