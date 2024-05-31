@@ -138,7 +138,7 @@ const BillPayment = () => {
         <h1 className="text-2xl">Bill Information</h1>
         <div className="mt-[3em] h-auto lg:w-[80%]">
           <form>
-            <div className="mt-[1em] flex flex-col gap-[2em] lg:flex-row">
+            <div className="xs:flex-col mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
               <div className="w-full">
                 <label
                   htmlFor="whatBill"
@@ -174,24 +174,24 @@ const BillPayment = () => {
               </h1>
             </div>
 
-            <div className="mt-[1em] flex flex-col gap-[2em] lg:flex-row">
+            <div className="xs:flex-col mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
               <div className="w-full">
                 <label
                   htmlFor="currency"
-                  className="flex-start flex font-br-semibold text-xs text-textp"
+                  className="flex-start mb-[1em] flex font-br-semibold text-xs text-textp" // Added margin-bottom here
                 >
                   Currency
                 </label>
                 <input
                   name="currency"
                   id="currency"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
+                  className="w-full rounded-lg border-[2px] border-border bg-inherit p-3"
                 />
               </div>
               <div className="w-full">
                 <label
                   htmlFor="amount"
-                  className="flex-start flex font-br-semibold text-xs text-textp"
+                  className="flex-start mb-[1em] flex font-br-semibold text-xs text-textp" 
                 >
                   Amount
                 </label>
@@ -199,7 +199,7 @@ const BillPayment = () => {
                   name="amount"
                   id="amount"
                   type="text"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
+                  className="w-full rounded-lg border-[2px] border-border bg-inherit p-3"
                 />
               </div>
             </div>
