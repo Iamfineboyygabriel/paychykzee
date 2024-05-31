@@ -26,7 +26,8 @@ const Peer = () => {
           <div className="mt-[2em] h-auto lg:mt-[3em] lg:w-[80%]">
             <form action="submit" className="mt-[2em]">
               <h1 className="font-br-semibold text-textp">You Send</h1>
-              <div className="mt-[1em] flex flex-col gap-[2em] lg:flex-row">
+
+              <div className="xs:flex-col mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
                 <div className="w-full">
                   <label
                     htmlFor="whatBill"
@@ -61,7 +62,8 @@ const Peer = () => {
               </div>
 
               <h1 className="font-br-semibold text-textp">You Receive</h1>
-              <div className="mt-[2em] flex flex-col gap-[2em] lg:flex-row">
+
+              <div className="xs:flex-col mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
                 <div className="w-full">
                   <label
                     htmlFor="currency"

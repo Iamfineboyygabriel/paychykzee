@@ -11,7 +11,7 @@ const Sidebar = () => {
   const location = useLocation().pathname;
 
   return (
-    <aside className="hidden min-h-full w-64 bg-dashboard text-white lg:block">
+    <aside className="hidden lg:block min-h-full w-64 bg-dashboard text-white">
       <div className="py-[2em]">
         <div>
           <NavLink
