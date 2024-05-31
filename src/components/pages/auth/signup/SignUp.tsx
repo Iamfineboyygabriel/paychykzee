@@ -43,7 +43,7 @@ const SignUp: React.FC<SignUpProps> = () => {
   return (
     <main className="flex min-h-screen w-full items-center justify-center bg-purpleblack py-9 font-br-regular text-text">
       <section className="flex h-full w-[95%] flex-row justify-between gap-5">
-        <div className="bg-side flex w-[35%] flex-col items-center rounded-xl sm:hidden lg:flex">
+        <div className="flex w-[35%] flex-col items-center rounded-xl bg-side sm:hidden lg:flex">
           <header className="mt-[4em] cursor-pointer" onClick={Home}>
             <h1 className="font-br-bold text-4xl">PayChyKzee</h1>
           </header>
@@ -64,7 +64,7 @@ const SignUp: React.FC<SignUpProps> = () => {
             </p>
           </div>
           <form action="login" className="mt-[1.5em] w-full text-logintext">
-            <div className="flex gap-3">
+            <div className="flex gap-3 sm:flex-col lg:flex-row">
               <div className="w-full">
                 <label htmlFor="firstName" className="flex-start flex">
                   First Name
@@ -100,7 +100,7 @@ const SignUp: React.FC<SignUpProps> = () => {
               />
             </div>
 
-            <div className="mt-[1em] flex gap-3">
+            <div className="mt-[1em]  flex gap-3 sm:flex-col lg:flex-row">
               <div className="w-full">
                 <label htmlFor="firstName" className="flex-start flex">
                   Country
@@ -124,7 +124,7 @@ const SignUp: React.FC<SignUpProps> = () => {
               </div>
             </div>
 
-            <div className="mt-[1em] flex gap-3">
+            <div className="mt-[1em] sm:flex-col flex gap-3 lg:flex-row">
               <div className="w-full">
                 <label htmlFor="firstName" className="flex-start flex">
                   Password

@@ -26,7 +26,7 @@ const ContactUs = () => {
                 className="rounded-md border border-border bg-inherit p-2 placeholder:text-border"
               />
             </div>
-            <div className="flex flex-col gap-5 lg:flex-row">
+            <div className="flex flex-col sm:mt-4 gap-5 lg:flex-row">
               <div>
                 <label htmlFor="email">Email Address</label>
                 <input

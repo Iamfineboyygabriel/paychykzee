@@ -9,21 +9,21 @@ const HeroSection = () => {
   };
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center bg-hero-pattern bg-cover font-br-regular">
-      <section className="w-full max-w-screen-md pt-[6em] text-center md:w-[60%] lg:w-[45%]">
-        <article className="gradient-border mx-auto w-full max-w-[90%] rounded-lg px-4 py-3 text-center sm:max-w-[80%] md:max-w-[70%]">
+      <section className="w-full text-center md:w-[60%]">
+        <article className="gradient-border m-auto mt-[3em] flex w-full justify-center rounded-lg py-3 text-center  lg:mt-[13em] lg:w-[50%]">
           <p className="font-br-semibold text-text">
             Seamless currency exchange at your fingertips
           </p>
         </article>
         <header className="mt-[2em]">
-          <h1 className="gradient-text font-br-bold text-4xl sm:text-5xl md:text-6xl">
+          <h1 className="gradient-text font-br-bold text-[2em] lg:text-[4em]">
             Welcome
           </h1>
-          <h1 className="gradient-text font-br-bold text-4xl sm:text-5xl md:text-6xl">
+          <h1 className="gradient-text font-br-bold text-[2em] lg:text-[4em]">
             to Pay ChyKzee
           </h1>
         </header>
-        <article className="mt-[1em] px-4 sm:px-6 md:px-8">
+        <article className="m-auto mt-[1em] text-center lg:w-[72%] ">
           <p className="text-text">
             Pay to Chykzee is your one-stop solution for all your currency
             exchange needs. Whether you're travelling, trading, or sending money

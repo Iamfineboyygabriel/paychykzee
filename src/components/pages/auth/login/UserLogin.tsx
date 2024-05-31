@@ -62,11 +62,11 @@ const UserLogin: React.FC<UserLoginProps> = () => {
           </div>
         </div>
         <section className="flex flex-1 flex-col items-center justify-center rounded-xl bg-dashboard px-4 py-[2em]">
-          <div className="w-[85%] text-center">
+          <div className="lg:w-[85%] text-center">
             <header>
               <h1 className="font-br-regular text-4xl leading-10">Login</h1>
             </header>
-            <div className="m-auto w-[78%]">
+            <div className="m-auto w-full lg:w-[78%]">
               <div className="mt-[1em]">
                 <p className="font-br-thin text-logintext">
                   Login with the right details to start using the platform
@@ -115,7 +115,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
                     <Link to="/forgot-password">Forget Password?</Link>
                   </p>
                 </div>
-                <div className="flex-start flex gap-2">
+                <div className="flex-start mt-4 flex gap-2">
                   <input type="checkbox" name="checkbox" id="checkbox" />
                   <p className="text-">Remember Password</p>
                 </div>
