@@ -10,9 +10,9 @@ const HeroSection = () => {
   };
 
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-center bg-hero-pattern bg-cover font-br-regular">
+    <main className="relative flex h-full w-full flex-col items-center justify-center bg-hero-pattern  bg-cover font-br-regular">
       <section className="w-full text-center md:w-[60%]">
-        <article className="gradient-border m-auto mt-[4em] flex w-full justify-center rounded-lg py-3 text-center lg:mt-[9em] lg:w-[50%]">
+        <article className="gradient-border m-auto mt-[3em] flex w-full justify-center rounded-lg py-3 text-center lg:mt-[6em] lg:w-[50%]">
           <p className="font-br-semibold text-text">
             Seamless currency exchange at your fingertips
           </p>
@@ -38,7 +38,7 @@ const HeroSection = () => {
           </button.PrimaryButton>
         </div>
       </section>
-      <div className=" bottom-0 left-0 mt-[4.5em] flex w-full justify-center">
+      <div className=" mt-[4em] flex w-full justify-center">
         <img src={card} alt="hero-card" />
       </div>
     </main>
