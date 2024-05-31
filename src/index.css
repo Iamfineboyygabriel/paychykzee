@@ -1,13 +1,80 @@
-body {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@font-face {
+  font-family: "br-regular";
+  src: url(./shared/fonts/BR\ Firma\ Regular.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "br-regular-italic";
+  src: url(./shared/fonts/BR\ Firma\ Regular\ Italic.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "br-light";
+  src: url(./shared/fonts/BR\ Firma\ Light.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "br-bold";
+  src: url(./shared/fonts/BR\ Firma\ Bold.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "br-semibold";
+  src: url(./shared/fonts/BR\ Firma\ SemiBold.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "br-bold-italic";
+  src: url(./shared/fonts/BR\ Firma\ Bold\ Italic.otf) format("opentype");
+}
+
+@font-face {
+  font-family: "br-thin";
+  src: url(./shared/fonts/BR\ Firma\ Thin.otf) format("opentype");
+}
+
+.gradient-text {
+  background-image: linear-gradient(to right, #4c1ef5, #b81ef5);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-border {
+  border: 2px solid;
+  border-image-slice: 1;
+  border-width: 2px;
+  border-image-source: linear-gradient(to right, #4c1ef5, #b81ef5);
+}
+
+.background-gradient {
+  background: linear-gradient(to bottom, #4c1ef5, #b81ef5);
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 1px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #070105 !important;
+  border-radius: 40px !important;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
