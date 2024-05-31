@@ -45,14 +45,14 @@ const Modal: React.FC<ModalProps> = ({
 
   return isOpen
     ? createPortal(
-        <div className="backdrop-blur-xs fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50 backdrop-blur-sm">
           <div
             ref={ref}
-            className={`relative h-auto w-full max-w-[50%]  rounded-[1em] bg-dashboard px-[8em] py-[4em] text-text shadow-lg ${className}`}
+            className={`lg:p-15 relative mx-4 my-8 w-full max-w-lg rounded-[1em] bg-dashboard p-[1.5em] shadow-lg md:max-w-xl md:p-6 lg:max-w-2xl xl:max-w-3xl ${className}`}
           >
             <button
               onClick={onClose}
-              className="absolute right-4 top-5 text-gray-500 hover:text-gray-700"
+              className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
             >
               <AiOutlineClose size={24} />
             </button>

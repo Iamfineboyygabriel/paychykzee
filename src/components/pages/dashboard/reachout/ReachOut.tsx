@@ -1,9 +1,12 @@
 import { button } from "../../../../shared/button/button";
 import Modal from "../../../../shared/modal/Modal";
+import image from "../../../../assets/svg/success.svg";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ReachOut = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -13,12 +16,16 @@ const ReachOut = () => {
     setIsModalOpen(false);
   };
 
+  const dashboard = () => {
+    navigate("/dashboard/home");
+  };
+
   return (
     <div className="font-br-regular">
       <h1 className="font-br-semibold text-2xl">Contact</h1>
-      <div className="m-auto mt-[1em] h-screen rounded-lg bg-dashboard px-[3em] py-[2em]">
+      <div className="m-auto mt-[1em] h-full rounded-lg bg-dashboard px-[1em] py-[2em] lg:px-[3em]">
         <p>Send Us Message</p>
-        <div className="w-[60%] text-center">
+        <div className="text-center lg:w-[60%]">
           <div className="mt-[1em]">
             <textarea
               name="contact"
@@ -35,25 +42,21 @@ const ReachOut = () => {
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="mb-4 space-x-12 font-br-semibold text-3xl">
-            Message Us
+        <div className="flex flex-col items-center justify-center lg:p-[4em]">
+          <img src={image} alt="Success" className="mb-4 h-24 w-24" />
+          <h1 className="mb-4 space-x-12 font-br-semibold text-3xl text-text">
+            Message Sent
           </h1>
-          <p className="mb-4 text-textp">
-            Please confirm your transaction before you proceed
+          <p className="mb-4 text-center text-textp">
+            You successfully sent a message to customer support team
           </p>
 
           <button.PrimaryButton
-            onClick={closeModal}
-            className="mt-[4em] w-full"
+            className="mt-[1.5em] w-full text-text lg:mt-[4em]"
+            onClick={dashboard}
           >
-            Make Payment
+            Go to Dashboard
           </button.PrimaryButton>
-          <div className="mt-[1.3em]">
-            <p className="gradient-text font-br-semibold">
-              Get A Discounted offer
-            </p>
-          </div>
         </div>
       </Modal>
     </div>

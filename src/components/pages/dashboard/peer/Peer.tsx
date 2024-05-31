@@ -18,40 +18,40 @@ const Peer = () => {
   return (
     <>
       <div className="font-br-regular">
-        <h1 className="font-br-semibold text-2xl">
+        <h1 className="font-br-semibold text-xl lg:text-2xl">
           Peer to Peer currency exchange
         </h1>
-        <div className="h-[calc(100vh - 4em)] m-auto mt-[1em] rounded-lg bg-dashboard px-[3em] py-[2em]">
+        <div className="h-[calc(100vh - 4em)] m-auto mt-[1em] rounded-lg bg-dashboard px-[1.5em] py-[2em] lg:px-[3em]">
           <h1 className="text-2xl">Send Money</h1>
-          <div className="mt-[2.5em] h-auto w-[80%]">
+          <div className="mt-[2em] h-auto lg:mt-[3em] lg:w-[80%]">
             <form action="submit" className="mt-[2em]">
               <h1 className="font-br-semibold text-textp">You Send</h1>
-              <div className="mt-[2em] flex gap-[2em]">
+              <div className="mt-[1em] flex flex-col gap-[2em] lg:flex-row">
                 <div className="w-full">
                   <label
-                    htmlFor="currency"
+                    htmlFor="whatBill"
                     className="flex-start flex font-br-semibold text-xs text-textp"
                   >
-                    Currency
+                    What bill are you paying for?
                   </label>
                   <input
-                    name="currency"
-                    id="currency"
-                    className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
+                    name="whatBill"
+                    id="WhatBill"
+                    className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3"
                   />
                 </div>
                 <div className="w-full">
                   <label
-                    htmlFor="amount"
+                    htmlFor="country"
                     className="flex-start flex font-br-semibold text-xs text-textp"
                   >
-                    Amount
+                    Country
                   </label>
                   <input
-                    name="amount"
-                    id="amount"
+                    name="country"
+                    id="country"
                     type="text"
-                    className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
+                    className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3"
                   />
                 </div>
               </div>
@@ -61,7 +61,7 @@ const Peer = () => {
               </div>
 
               <h1 className="font-br-semibold text-textp">You Receive</h1>
-              <div className="mt-[2em] flex gap-[2em]">
+              <div className="mt-[2em] flex flex-col gap-[2em] lg:flex-row">
                 <div className="w-full">
                   <label
                     htmlFor="currency"
@@ -90,7 +90,7 @@ const Peer = () => {
                   />
                 </div>
               </div>
-              <div className="mt-[1.5em] flex gap-4">
+              <div className="mt-[1.5em] flex flex-col gap-4 lg:flex-row">
                 <p>USB/GPB</p>
                 <div className="flex gap-3">
                   <p>Rate:</p>
@@ -102,23 +102,26 @@ const Peer = () => {
                 </div>
               </div>
             </form>
-            <div className="mt-[7em] px-[5em]">
-              <button.PrimaryButton className="w-full" onClick={openModal}>
+            <div className="flex justify-center sm:mt-[2em] lg:mt-[7em]">
+              <button.PrimaryButton
+                className=" w-full lg:w-[80%]"
+                onClick={openModal}
+              >
                 Continue
               </button.PrimaryButton>
             </div>
           </div>
         </div>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <div className="flex flex-col items-center justify-center">
-            <h1 className="mb-4 space-x-12 font-br-semibold text-3xl">
+          <div className="mt-[1.5em] flex flex-col items-center justify-center">
+            <h1 className="mb-4 font-br-semibold text-2xl text-text lg:text-3xl">
               Confirm Transaction
             </h1>
-            <p className="mb-4 text-textp">
+            <p className="mb-4 text-center text-textp">
               Please confirm your transaction before you proceed
             </p>
 
-            <div className="mt-[1.5em] w-[72%]">
+            <div className="lg:mt-[1.5em] lg:w-[57%]">
               <div className="w-full">
                 <label
                   htmlFor="amount"
@@ -150,7 +153,7 @@ const Peer = () => {
               </div>
               <div className="mt-[1.5em] flex gap-1">
                 <img src={exclamation} alt="information" />
-                <p className="text-xs">
+                <p className="text-sm text-text">
                   Please note that you will be charged an exchange fee after
                   invoice has been received.
                 </p>
@@ -158,7 +161,7 @@ const Peer = () => {
             </div>
             <button.PrimaryButton
               onClick={closeModal}
-              className="mt-[4em] w-full"
+              className="mt-[1.5em] w-full text-text lg:mt-[4em] lg:w-[75%]"
             >
               Make Payment
             </button.PrimaryButton>

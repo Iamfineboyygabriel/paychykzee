@@ -1,16 +1,26 @@
+import { useNavigate } from "react-router-dom";
 import { button } from "../../../../shared/button/button";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const peer = () => {
+    navigate("/dashboard/peer-to-peer");
+  };
+
+  const bill = () => {
+    navigate("/dashboard/bill-payment");
+  };
   return (
     <div className="h-auto overflow-auto font-br-regular">
       <h1 className="font-br-semibold text-2xl">Outsourced Bill Payment</h1>
-      <div className="h-[calc(100vh - 4em)] m-auto mt-[1em] overflow-auto rounded-lg bg-dashboard px-[3em] py-[2em]">
+      <div className="h-[calc(100vh - 4em)] m-auto mt-[1em] overflow-auto rounded-lg bg-dashboard px-[1.5em] py-[2em] lg:px-[3em]">
         <h1 className="text-2xl">Overview</h1>
-        <div className="mt-[3em] h-auto ">
-          <div className="bg-peer-background relative rounded-2xl bg-cover bg-no-repeat p-[3em]">
+        <div className="mt-[2em] h-auto lg:mt-[3em] ">
+          <div className="relative rounded-2xl bg-peer-background bg-cover bg-no-repeat p-[1.5em] lg:p-[3em]">
             <div className="absolute inset-0 rounded-2xl bg-black opacity-50"></div>
-            <div className="relative z-10 w-[60%]">
-              <h1 className="text-3xl text-white">
+            <div className="relative z-10 lg:w-[60%]">
+              <h1 className="text-xl text-white lg:text-3xl">
                 Peer to Peer Currency Exchange Service
               </h1>
             </div>
@@ -29,16 +39,21 @@ const Home = () => {
               </p>
             </div>
             <div className="relative z-10 mt-5">
-              <button.PrimaryButton className="bg-white font-br-regular text-primary">
+              <button.PrimaryButton
+                className="bg-white font-br-regular text-primary"
+                onClick={peer}
+              >
                 Exchange Currency
               </button.PrimaryButton>
             </div>
           </div>
 
-          <div className="bg-outsourced-background relative mt-[2em] rounded-2xl bg-cover bg-no-repeat p-[3em]">
+          <div className="relative mt-[2em] rounded-2xl bg-outsourced-background bg-cover bg-no-repeat p-[1.5em] lg:p-[3em]">
             <div className="absolute inset-0 rounded-2xl bg-black opacity-50"></div>
             <div className="relative z-10">
-              <h1 className="text-3xl text-white">Outsourced Bill Payment</h1>
+              <h1 className="text-xl text-white lg:text-3xl">
+                Outsourced Bill Payment
+              </h1>
             </div>
             <div className="relative z-10 mt-[1em] font-br-light text-white">
               <p>
@@ -53,7 +68,10 @@ const Home = () => {
               </p>
             </div>
             <div className="relative z-10 mt-5">
-              <button.PrimaryButton className="bg-white font-br-regular text-primary">
+              <button.PrimaryButton
+                className="bg-white font-br-regular text-primary"
+                onClick={bill}
+              >
                 Pay your Bills
               </button.PrimaryButton>
             </div>

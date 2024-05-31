@@ -8,11 +8,11 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <div className="flex h-screen  flex-col">
+    <div className="flex h-screen flex-col">
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="h-auto flex-1 overflow-y-auto bg-purpleprimary px-[1.5em] py-[2em]  text-text">
+        <main className="h-auto flex-1 overflow-y-auto bg-purpleprimary px-[1.3em] py-[2em] text-text  lg:px-[1.5em]">
           {children}
         </main>
       </div>
