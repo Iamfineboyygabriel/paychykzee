@@ -174,24 +174,24 @@ const BillPayment = () => {
               </h1>
             </div>
 
-            <div className="xs:flex-col mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
+            <div className="xs:flex-col relative mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
               <div className="w-full">
                 <label
                   htmlFor="currency"
-                  className="flex-start mb-[1em] flex font-br-semibold text-xs text-textp" // Added margin-bottom here
+                  className="flex-start flex font-br-semibold text-xs text-textp"
                 >
                   Currency
                 </label>
                 <input
                   name="currency"
                   id="currency"
-                  className="w-full rounded-lg border-[2px] border-border bg-inherit p-3"
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3" // Added margin-top here
                 />
               </div>
               <div className="w-full">
                 <label
                   htmlFor="amount"
-                  className="flex-start mb-[1em] flex font-br-semibold text-xs text-textp" 
+                  className="flex-start flex font-br-semibold text-xs text-textp"
                 >
                   Amount
                 </label>
@@ -199,7 +199,7 @@ const BillPayment = () => {
                   name="amount"
                   id="amount"
                   type="text"
-                  className="w-full rounded-lg border-[2px] border-border bg-inherit p-3"
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3" // Added margin-top here
                 />
               </div>
             </div>
