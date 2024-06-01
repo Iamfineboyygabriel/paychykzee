@@ -34,7 +34,7 @@ const Header = () => {
         />
       </div>
       <SideModal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="mt-[3em] flex flex-col gap-[2em]">
+        <div className="mt-[4em] flex flex-col gap-[2em]">
           <Link
             className="cursor-pointer font-br-regular text-xl text-text"
             to="/dashboard/home"
