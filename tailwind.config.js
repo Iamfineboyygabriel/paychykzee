@@ -2,21 +2,21 @@
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx,css,scss}"],
   theme: {
-    // screens: {
-    //   sm: "320px",
-    //   md: "640px",
-    //   lg: "1024px",
-    //   xl: "1280px",
-    //   "2xl": "1536px",
-    // },
     screens: {
-      xs: "320px",
-      sm: "360px",
-      md: "600px",
-      lg: "768px",
-      xl: "1024px",
-      "2xl": "1280px",
+      sm: "320px",
+      md: "640px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
     },
+    // screens: {
+    //   xs: "320px",
+    //   sm: "360px",
+    //   md: "600px",
+    //   lg: "768px",
+    //   xl: "1024px",
+    //   "2xl": "1280px",
+    // },
 
     extend: {
       backgroundImage: {

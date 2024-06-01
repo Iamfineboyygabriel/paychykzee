@@ -27,7 +27,7 @@ const Navbar = () => {
         <header>
           <img src={logo} alt="" />
         </header>
-        <div className="hidden items-center gap-7 lg:flex">
+        <div className="hidden  items-center gap-7 lg:flex">
           <ScrollLink
             className="cursor-pointer text-text"
             to="services"
