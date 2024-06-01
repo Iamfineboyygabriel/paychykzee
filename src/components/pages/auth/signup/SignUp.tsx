@@ -22,8 +22,12 @@ const SignUp: React.FC<SignUpProps> = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const [passwordType, setPasswordType] = useState("password");
+
   const [passwordValue, setPasswordValue] = useState("");
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
+  const [passwordType, setPasswordType] = useState("password");
+  const [confirmPasswordType, setConfirmPasswordType] = useState("password");
+
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -32,8 +36,20 @@ const SignUp: React.FC<SignUpProps> = () => {
     );
   };
 
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordType((prevType) =>
+      prevType === "password" ? "text" : "password",
+    );
+  };
+
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(event.target.value);
+  };
+
+  const handleConfirmPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setConfirmPasswordValue(event.target.value);
   };
 
   const Home = () => {
@@ -102,7 +118,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 
             <div className="mt-[1em]  flex gap-3 sm:flex-col lg:flex-row">
               <div className="w-full">
-                <label htmlFor="firstName" className="flex-start flex">
+                <label htmlFor="country" className="flex-start flex">
                   Country
                 </label>
                 <input
@@ -112,7 +128,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                 />
               </div>
               <div className="w-full">
-                <label htmlFor="lastName" className="flex-start flex">
+                <label htmlFor="phoneNumber" className="flex-start flex">
                   Phone Number
                 </label>
                 <input
@@ -126,7 +142,7 @@ const SignUp: React.FC<SignUpProps> = () => {
 
             <div className="mt-[1em] flex gap-3 sm:flex-col lg:flex-row">
               <div className="w-full">
-                <label htmlFor="firstName" className="flex-start flex">
+                <label htmlFor="password" className="flex-start flex">
                   Password
                 </label>
                 <div className="relative flex items-center text-center">
@@ -152,24 +168,24 @@ const SignUp: React.FC<SignUpProps> = () => {
                 </div>
               </div>
               <div className="w-full">
-                <label htmlFor="lastName" className="flex-start flex">
+                <label htmlFor="confirmPassword" className="flex-start flex">
                   Confirm Password
                 </label>
                 <div className="relative flex items-center text-center">
                   <input
-                    name="password"
-                    id="password"
-                    type={passwordType}
-                    value={passwordValue}
-                    onChange={handlePasswordChange}
+                    name="confirmPassword"
+                    id="confirmPassword"
+                    type={confirmPasswordType}
+                    value={confirmPasswordValue}
+                    onChange={handleConfirmPasswordChange}
                     className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
                   />
                   <button
                     type="button"
-                    onClick={togglePasswordVisibility}
+                    onClick={toggleConfirmPasswordVisibility}
                     className="absolute right-4 mt-[1em] self-center"
                   >
-                    {passwordType === "password" ? (
+                    {confirmPasswordType === "password" ? (
                       <MdOutlineVisibilityOff />
                     ) : (
                       <MdOutlineVisibility />

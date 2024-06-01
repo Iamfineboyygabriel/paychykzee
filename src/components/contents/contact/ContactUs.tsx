@@ -1,6 +1,17 @@
 import { button } from "../../../shared/button/button";
+import Modal from "../../../shared/modal/Modal";
+import image from "../../../assets/svg/success.svg";
+import { useState } from "react";
 
 const ContactUs = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <main className="bg-purpleblack font-br-regular">
       <section className="m-auto px-4 py-[5em] lg:w-[80%] lg:px-0">
@@ -23,17 +34,17 @@ const ContactUs = () => {
                 type="text"
                 id="name"
                 placeholder="Enter your full name"
-                className="rounded-md border border-border bg-inherit p-2 placeholder:text-border"
+                className="rounded-md border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:bg-inherit focus:outline-none"
               />
             </div>
-            <div className="flex flex-col sm:mt-4 gap-5 lg:flex-row">
+            <div className="flex flex-col gap-5 sm:mt-4 lg:flex-row">
               <div>
                 <label htmlFor="email">Email Address</label>
                 <input
                   type="text"
                   id="email"
                   placeholder="Enter your email address"
-                  className="mt-3 w-full rounded-md border border-border bg-inherit p-2 placeholder:text-border"
+                  className="mt-3 w-full  rounded-md border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:outline-none"
                 />
               </div>
               <div>
@@ -42,7 +53,7 @@ const ContactUs = () => {
                   type="text"
                   id="phoneNumber"
                   placeholder="Enter your phone number"
-                  className="mt-3 w-full rounded-md border border-border bg-inherit p-2 placeholder:text-border"
+                  className="mt-3  w-full rounded-md border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:outline-none"
                 />
               </div>
             </div>
@@ -51,17 +62,32 @@ const ContactUs = () => {
               <textarea
                 id="message"
                 placeholder="Describe your message"
-                className="h-[180px] border border-border bg-inherit p-2 placeholder:text-border"
+                className="h-[180px]  border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:outline-none"
               ></textarea>
             </div>
             <div className="mt-[1.5em]">
-              <button.PrimaryButton className="w-full">
+              <button.PrimaryButton className="w-full" onClick={openModal}>
                 Send Message
               </button.PrimaryButton>
             </div>
           </form>
         </section>
       </section>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="flex flex-col items-center justify-center lg:p-[4em]">
+          <img src={image} alt="Success" className="mb-4 h-24 w-24" />
+          <h1 className="mb-4 space-x-12 font-br-semibold text-3xl text-text">
+            Message Sent
+          </h1>
+          <p className="mb-4 text-center text-textp">
+            You successfully sent a message to customer support team
+          </p>
+
+          <button.PrimaryButton className="mt-[1.5em] w-full text-text lg:mt-[4em]">
+            Go to Home
+          </button.PrimaryButton>
+        </div>
+      </Modal>
     </main>
   );
 };
