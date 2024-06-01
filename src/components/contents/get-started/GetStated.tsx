@@ -9,9 +9,9 @@ const GetStarted = () => {
   };
   return (
     <div>
-      <main className="w-full  font-br-regular">
-        <section className="ml-auto flex w-[90%] flex-col justify-between lg:flex-row">
-          <div className="w-full lg:w-[27%] lg:pt-[3.5em]">
+      <main className="w-full font-br-regular">
+        <section className="ml-auto  flex w-[90%] flex-col justify-between lg:flex-row">
+          <div className="w-full text-center lg:w-[27%] lg:pt-[3.5em] lg:text-left">
             <header className="mt-[1.7em]">
               <h1 className="gradient-text font-br-bold text-3xl">
                 Get Started
@@ -30,7 +30,7 @@ const GetStarted = () => {
               </button.PrimaryButton>
             </div>
           </div>
-          <div>
+          <div className="flex justify-center lg:justify-end">
             <img src={card} alt="card" className="mt-[5em]" />
           </div>
         </section>

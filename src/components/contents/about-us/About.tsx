@@ -3,17 +3,17 @@ import ceo from "../../../assets/png/ceo.png";
 const About = () => {
   return (
     <main className="w-full bg-purpleblack font-br-regular text-text">
-      <section className="m-auto flex  flex-col justify-between lg:w-[80%] lg:flex-row">
+      <section className="m-auto flex flex-col justify-between px-3 lg:w-[80%] lg:flex-row">
         <div className="pt-[3.5em] lg:w-[45%]">
-          <article>
+          <article className="text-center lg:text-left">
             <p className="font-br-light text-xl">About Us</p>
           </article>
-          <header className="mt-[1.7em]">
+          <header className="mt-[1.7em] text-center lg:text-left">
             <h1 className="gradient-text font-br-bold text-3xl sm:text-4xl">
               Pay ChyKzee
             </h1>
           </header>
-          <div className="mt-[1.7em]">
+          <div className="mt-[1.7em] text-center lg:text-left">
             <article className="font-br-light text-base leading-7 sm:text-lg">
               PayChykzee bridges the gap between complex currency exchange
               process and the need for a user-friendly solution. We recognized
