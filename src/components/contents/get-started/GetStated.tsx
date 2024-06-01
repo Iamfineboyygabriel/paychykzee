@@ -18,7 +18,7 @@ const GetStarted = () => {
               </h1>
             </header>
             <div className="mt-[1.7em]">
-              <article className="leading-7 text-textp">
+              <article className="leading-7 px-auto text-textp">
                 Join thousands of satisfied users who trust Pay Chykzee for
                 their currency exchange needs. Create an account now and
                 experience the ease of currency exchange.
