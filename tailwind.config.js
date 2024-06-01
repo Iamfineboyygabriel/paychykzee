@@ -10,16 +10,14 @@ module.exports = {
     //   "2xl": "1536px",
     // },
     screens: {
-      sm: "640px",
-
-      md: "768px",
-
-      lg: "1024px",
-
-      xl: "1280px",
-
-      "2xl": "1536px",
+      xs: "320px",
+      sm: "360px",
+      md: "600px",
+      lg: "768px",
+      xl: "1024px",
+      "2xl": "1280px",
     },
+
     extend: {
       backgroundImage: {
         "hero-pattern": "url('/src/assets/jpg/hero.png')",
