@@ -26,34 +26,32 @@ export const Footer = () => {
             <img src={mail} alt="mail-icon" />
             hello@paychykzee.com
           </div>
-          {""}
           <div className="flex items-center gap-2">
             <img src={mobile} alt="mobile-icon" />
             +444 356 988
           </div>
-          {""}
           <div className="flex items-center gap-2">
             <img src={location} alt="mobile-icon" />
             Lagos,Nigeria.
           </div>
         </div>
         <hr className="border-1 mt-[2em] border-line" />
-        <div className="mt-[2em] flex items-center justify-between gap-2 rounded-full border border-none bg-inherit px-3 py-1.5 text-textp sm:flex-col lg:flex-row lg:border-line lg:bg-purpleblack">
+        <div className="flex items-center justify-between gap-4 rounded-full bg-inherit px-3 py-1.5 text-textp sm:flex-col lg:flex-row lg:border-line lg:bg-purpleblack">
           <div className="flex gap-3">
             <div>
-              <img src={facebook} alt="facebookk-logo" />
+              <img src={facebook} alt="facebook-logo" />
             </div>
             <div>
               <img src={tweeter} alt="tweeter-logo" />
             </div>
             <div>
-              <img src={lnkdln} alt="tweeter-logo" />
+              <img src={lnkdln} alt="linkedin-logo" />
             </div>
           </div>
           <div>
             <p className="font-br-light">PayChykzee All Rights Reserved</p>
           </div>
-          <div className="">
+          <div>
             <p className="font-br-light">Privacy Policy | Terms of service</p>
           </div>
         </div>
