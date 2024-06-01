@@ -13,7 +13,7 @@ const HeroSection = () => {
     <main className="relative flex h-full w-full flex-col items-center justify-center bg-hero-pattern bg-cover  px-3 font-br-regular">
       <section className="w-full  text-center md:w-[60%]">
         <article className="gradient-border m-auto mt-[3em] flex w-full justify-center rounded-lg py-3 text-center lg:mt-[6em] lg:w-[50%]">
-          <p className="font-br-semibold text-text">
+          <p className="font-br-semibold sm:text-sm text-text">
             Seamless currency exchange at your fingertips
           </p>
         </article>
