@@ -66,7 +66,7 @@ const ContactUs = () => {
               ></textarea>
             </div>
             <div className="mt-[1.5em]">
-              <button.PrimaryButton className="w-full" onClick={openModal}>
+              <button.PrimaryButton className="w-full" >
                 Send Message
               </button.PrimaryButton>
             </div>
