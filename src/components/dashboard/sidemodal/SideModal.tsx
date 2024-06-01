@@ -46,7 +46,7 @@ const SideModal: React.FC<ModalProps> = ({
         <div className="fixed inset-0 z-50 flex items-center backdrop-blur-sm">
           <div
             ref={ref}
-            className={`relative mx-4 my-8 h-screen w-[60%] rounded-[1em] bg-dashboard p-[1.5em] shadow-lg ${className}`}
+            className={`relative mx-4 my-8 h-screen w-[60%]  bg-dashboard p-[1.5em] shadow-lg ${className}`}
           >
             <button
               onClick={onClose}
