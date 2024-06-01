@@ -2,9 +2,9 @@ import ceo from "../../../assets/png/ceo.png";
 
 const About = () => {
   return (
-    <main className="bg-purpleblack text-text w-full font-br-regular">
-      <section className="m-auto flex w-[90%] max-w-screen-lg flex-col justify-between lg:w-[80%] lg:flex-row">
-        <div className="pt-[3.5em] lg:w-[43%]">
+    <main className="w-full bg-purpleblack font-br-regular text-text">
+      <section className="m-auto flex  flex-col justify-between lg:w-[80%] lg:flex-row">
+        <div className="pt-[3.5em] lg:w-[45%]">
           <article>
             <p className="font-br-light text-xl">About Us</p>
           </article>
@@ -15,11 +15,11 @@ const About = () => {
           </header>
           <div className="mt-[1.7em]">
             <article className="font-br-light text-base leading-7 sm:text-lg">
-              PayChykzee bridges the gap between the complex currency exchange
+              PayChykzee bridges the gap between complex currency exchange
               process and the need for a user-friendly solution. We recognized
               the difficulties faced by businesses and individuals in managing
-              foreign currencies and set out to develop a platform that offers a
-              seamless experience.
+              foreign currencies and set out to develop a platform that would
+              offers a seamless experience.
             </article>
           </div>
         </div>
