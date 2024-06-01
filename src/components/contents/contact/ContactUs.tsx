@@ -1,5 +1,5 @@
 import { button } from "../../../shared/button/button";
-import Modal from "../../../shared/modal/Modal";
+import Modal from "../../../shared/modal//Modal";
 import image from "../../../assets/svg/success.svg";
 import { useState } from "react";
 

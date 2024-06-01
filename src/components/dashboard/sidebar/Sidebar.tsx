@@ -46,7 +46,9 @@ const Sidebar = () => {
                   src={isActive ? activepeer : inactivepeer}
                   alt="peer-to-peer"
                 />
-                <span className="ml-2">Peer-to-Peer</span>
+                <span className="ml-2">
+                  Peer-to-Peer
+                  </span>
               </>
             )}
           </NavLink>
@@ -67,7 +69,9 @@ const Sidebar = () => {
                   src={isActive ? activebill : inactivebill}
                   alt="bill-payment"
                 />
-                <span className="ml-2">Bill Payment</span>
+                <span className="ml-2">
+                  Bill Payment
+                  </span>
               </>
             )}
           </NavLink>
