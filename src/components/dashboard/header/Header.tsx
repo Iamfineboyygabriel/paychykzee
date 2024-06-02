@@ -63,6 +63,20 @@ const Header = () => {
           >
             Contact Us
           </Link>
+          <Link
+            className="cursor-pointer font-br-regular text-xl text-text"
+            to="settings/personal"
+            onClick={handleLinkClick}
+          >
+            Personal
+          </Link>
+          <Link
+            className="cursor-pointer font-br-regular text-xl text-text"
+            to="settings/security"
+            onClick={handleLinkClick}
+          >
+            Security
+          </Link>
           <div>
             <button.PrimaryButton className="text-text">
               Log Out

@@ -17,11 +17,13 @@ const Peer = () => {
 
   return (
     <>
-      <div className="font-br-regular">
-        <h1 className="font-br-semibold text-xl lg:text-2xl">
-          Peer to Peer currency exchange
-        </h1>
-        <div className="h-[calc(100vh - 4em)] m-auto mt-[1em] rounded-lg bg-dashboard px-[1.5em] py-[2em] lg:px-[3em]">
+      <main className="font-br-regular">
+        <header>
+          <h1 className="font-br-semibold text-xl lg:text-2xl">
+            Peer to Peer currency exchange
+          </h1>
+        </header>
+        <section className="h-[calc(100vh - 4em)] m-auto mt-[1em] rounded-lg bg-dashboard px-[1.5em] py-[2em] lg:px-[3em]">
           <h1 className="text-2xl">Send Money</h1>
           <div className="mt-[2em] h-auto lg:mt-[3em] lg:w-[80%]">
             <form action="submit" className="mt-[2em]">
@@ -113,12 +115,14 @@ const Peer = () => {
               </button.PrimaryButton>
             </div>
           </div>
-        </div>
+        </section>
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <div className="mt-[1.5em] flex flex-col items-center justify-center">
-            <h1 className="mb-4 font-br-semibold text-2xl text-text lg:text-3xl">
-              Confirm Transaction
-            </h1>
+            <header>
+              <h1 className="mb-4 font-br-semibold text-2xl text-text lg:text-3xl">
+                Confirm Transaction
+              </h1>
+            </header>
             <p className="mb-4 text-center text-textp">
               Please confirm your transaction before you proceed
             </p>
@@ -167,14 +171,14 @@ const Peer = () => {
             >
               Make Payment
             </button.PrimaryButton>
-            <div className="mt-[1.3em]">
+            <section className="mt-[1.3em]">
               <p className="gradient-text font-br-semibold">
                 Get A Discounted offer
               </p>
-            </div>
+            </section>
           </div>
         </Modal>
-      </div>
+      </main>
     </>
   );
 };

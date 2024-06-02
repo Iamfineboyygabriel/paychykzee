@@ -119,11 +119,10 @@ const Navbar = () => {
             <Link to="/login" className="text-xl text-text">
               Login
             </Link>
-            <div>
-              <button.PrimaryButton className="text-text">
-                Create account
-              </button.PrimaryButton>
-            </div>
+
+            <button.PrimaryButton className="text-text">
+              Create account
+            </button.PrimaryButton>
           </motion.div>
         </ModalBody>
       </Modal>
