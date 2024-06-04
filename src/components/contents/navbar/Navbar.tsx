@@ -76,7 +76,7 @@ const Navbar = () => {
         fullscreen
       >
         <ModalBody className="flex h-screen w-screen flex-col items-center justify-center bg-purpleblack p-7 text-center">
-          <div className="absolute right-8 top-6">
+          <div className="absolute right-8 top-12">
             <AiOutlineClose
               onClick={toggle}
               className="cursor-pointer text-text"
