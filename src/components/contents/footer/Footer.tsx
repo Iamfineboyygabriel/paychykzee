@@ -5,6 +5,7 @@ import location from "../../../assets/svg/location.png";
 import facebook from "../../../assets/svg/facebook.svg";
 import tweeter from "../../../assets/svg/tweeter.svg";
 import lnkdln from "../../../assets/svg/lnkdn.svg";
+import { Link as ScrollLink } from "react-scroll";
 
 export const Footer = () => {
   return (
@@ -13,11 +14,17 @@ export const Footer = () => {
         <header>
           <h1 className="gradient-text font-br-bold text-3xl">PayChyKzee</h1>
         </header>
-        <div className="mt-[2em] space-x-2 font-br-light text-text lg:space-x-5">
-          <Link to="#">Service</Link>
-          <Link to="#">About Us</Link>
-          <Link to="#">Contact Us</Link>
-          <Link to="#">Login</Link>
+        <div className="mt-[2em] cursor-pointer space-x-2 font-br-light text-text lg:space-x-5">
+          <ScrollLink to="services" smooth={true} duration={500}>
+            Service
+          </ScrollLink>
+          <ScrollLink to="about-us" smooth={true} duration={500}>
+            About Us
+          </ScrollLink>
+          <ScrollLink to="contact-us" smooth={true} duration={500}>
+            Contact Us
+          </ScrollLink>
+          <Link to="/login">Login</Link>
           <Link to="/sign-up">Sign Up</Link>
         </div>
         <hr className="border-1 mt-[2em] border-line" />

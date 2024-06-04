@@ -10,7 +10,7 @@ const GetStarted = () => {
   return (
     <div>
       <main className="w-full font-br-regular">
-        <section className="ml-auto  flex w-[90%] flex-col justify-between lg:flex-row">
+        <section className="m-auto flex w-[90%] flex-col justify-between lg:mr-0 lg:flex-row">
           <div className="w-full text-center lg:w-[27%] lg:pt-[3.5em] lg:text-left">
             <header className="mt-[1.7em]">
               <h1 className="gradient-text font-br-bold text-3xl">
@@ -18,7 +18,7 @@ const GetStarted = () => {
               </h1>
             </header>
             <div className="mt-[1.7em]">
-              <article className="leading-7 px-auto text-textp">
+              <article className="px-auto leading-7 text-textp">
                 Join thousands of satisfied users who trust Pay Chykzee for
                 their currency exchange needs. Create an account now and
                 experience the ease of currency exchange.
