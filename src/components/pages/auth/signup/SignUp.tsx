@@ -357,7 +357,7 @@ const SignUp: React.FC<SignUpProps> = () => {
             <div className="mt-[4em] text-center">
               <button.PrimaryButton
                 type="submit"
-                className={`w-[70%] ${!areFieldsFilled() ? "bg-disabledPrimary cursor-not-allowed" : "text-text"}`}
+                className={`w-full lg:w-[70%] ${!areFieldsFilled() ? "bg-disabledPrimary cursor-not-allowed" : "text-text"}`}
                 disabled={!areFieldsFilled() || loading}
               >
                 {loading ? (
