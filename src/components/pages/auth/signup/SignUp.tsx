@@ -149,15 +149,20 @@ const SignUp: React.FC<SignUpProps> = () => {
         setConfirmPasswordValue("");
         setIsModalOpen(true);
         setToken("");
-      })
+      })      
       .catch((error) => {
-        if (error.statusCode === 400) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          toast.error(error.response.data.message);
+        } else if (error.message) {
           toast.error(error.message);
         } else {
-          toast.error(
-            error.message || "An error occurred. Please try again later.",
-          );
+          toast.error(String(error));
         }
+
         setLoading(false);
       });
     setUserEmail(email);
