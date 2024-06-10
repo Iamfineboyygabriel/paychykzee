@@ -31,6 +31,7 @@ module.exports = {
         text: "#FFFFFF",
         textp: "#7B768C",
         primary: "#4C1EF5",
+        disabledPrimary: "rgba(76, 30, 245, 0.5)",
         purpleprimary: "#070105",
         purpleblack: "#04010F",
         purplewhite: "#F3F0FE",

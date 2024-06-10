@@ -7,11 +7,11 @@ import exclamation from "../../../../assets/svg/exclamation.svg";
 const Peer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
+  const openModal = async () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setIsModalOpen(false);
   };
 

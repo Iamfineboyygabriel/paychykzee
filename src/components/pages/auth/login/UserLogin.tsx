@@ -3,6 +3,11 @@ import image from "../../../../assets/png/hands-money.png";
 import { button } from "../../../../shared/button/button";
 import { MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { LoginUser } from "../../../../shared/redux/slices/landing.slices";
+import { AppDispatch } from "../../../../shared/redux/store";
+import { toast } from "react-toastify";
+import ReactLoading from "react-loading";
 
 interface UserLoginProps {
   emailInputProps?: {
@@ -22,12 +27,21 @@ const UserLogin: React.FC<UserLoginProps> = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [passwordType, setPasswordType] = useState("password");
-  const [passwordValue, setPasswordValue] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordValue(event.target.value);
+    setPassword(event.target.value);
+  };
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
   };
 
   const togglePasswordVisibility = () => {
@@ -35,8 +49,61 @@ const UserLogin: React.FC<UserLoginProps> = () => {
       prevType === "password" ? "text" : "password",
     );
   };
+
   const Home = () => {
     navigate("/");
+  };
+
+  const loginUserData: React.FormEventHandler<HTMLFormElement> = async (
+    event,
+  ) => {
+    event.preventDefault();
+
+    setLoading(true);
+    let body = {
+      email,
+      password,
+    };
+
+    try {
+      const response = await dispatch(LoginUser(body)).unwrap();
+      console.log("Response:", response);
+      setLoading(false);
+      navigate("/dashboard/home");
+      toast.success("Login successful");
+    } catch (error: any) {
+      console.error("Error:", error);
+      setLoading(false);
+      const errorMessage =
+        error.response?.data?.message || "Invalid credentials";
+      toast.error(errorMessage);
+    }
+
+    if (rememberMe) {
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("password", password);
+      sessionStorage.setItem("rememberMe", JSON.stringify(rememberMe));
+    } else {
+      sessionStorage.removeItem("email");
+      sessionStorage.removeItem("password");
+      sessionStorage.removeItem("rememberMe");
+    }
+  };
+
+  useEffect(() => {
+    const storedEmail = sessionStorage.getItem("email");
+    const storedPassword = sessionStorage.getItem("password");
+    const storedRememberMe = sessionStorage.getItem("rememberMe");
+
+    if (storedRememberMe === "true") {
+      setEmail(storedEmail || "");
+      setPassword(storedPassword || "");
+      setRememberMe(true);
+    }
+  }, []);
+
+  const toggleRememberMe = () => {
+    setRememberMe(!rememberMe);
   };
 
   return (
@@ -72,13 +139,19 @@ const UserLogin: React.FC<UserLoginProps> = () => {
                   Login with the right details to start using the platform
                 </p>
               </div>
-              <form action="login" className="mt-[1.5em] text-logintext">
+              <form
+                className="mt-[1.5em] text-logintext"
+                onSubmit={loginUserData}
+              >
                 <div className="flex flex-col gap-3">
                   <label htmlFor="email" className="flex-start flex">
                     Email Address
                   </label>
                   <input
                     name="email"
+                    type="email"
+                    value={email}
+                    onChange={handleEmailChange}
                     id="email"
                     className="rounded-lg border-[2px]  border-border  bg-inherit p-3 focus:border-side focus:outline-none"
                   />
@@ -92,7 +165,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
                       name="password"
                       id="password"
                       type={passwordType}
-                      value={passwordValue}
+                      value={password}
                       onChange={handlePasswordChange}
                       className=" w-full items-center rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                     />
@@ -116,15 +189,34 @@ const UserLogin: React.FC<UserLoginProps> = () => {
                   </p>
                 </div>
                 <div className="flex-start mt-4 flex gap-2">
-                  <input type="checkbox" name="checkbox" id="checkbox" />
+                  <input
+                    type="checkbox"
+                    name="checkbox"
+                    id="checkbox"
+                    checked={rememberMe}
+                    onChange={toggleRememberMe}
+                  />
                   <p className="text-">Remember Password</p>
                 </div>
+                <div className="mt-[1.5em]">
+                  <button.PrimaryButton
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <ReactLoading
+                        color="#FFFFFF"
+                        width={25}
+                        height={25}
+                        type="spin"
+                      />
+                    ) : (
+                      "Login"
+                    )}
+                  </button.PrimaryButton>
+                </div>
               </form>
-            </div>
-            <div className="mt-[1.5em]">
-              <button.PrimaryButton className="w-full">
-                Login
-              </button.PrimaryButton>
             </div>
             <section className="mt-[1.5em]">
               <p className="font-br-light">

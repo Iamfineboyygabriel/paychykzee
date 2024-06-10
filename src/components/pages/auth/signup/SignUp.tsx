@@ -1,8 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
-import image from "../../../../assets/svg/hand.svg";
-import { button } from "../../../../shared/button/button";
-import { MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../shared/redux/store";
+import { useAppSelector } from "../../../../shared/redux/reduxHooks";
+import {
+  RegisterUser,
+  VerifyUserAuth,
+} from "../../../../shared/redux/slices/landing.slices";
+import { Link, useNavigate } from "react-router-dom";
+import { MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
+import { button } from "../../../../shared/button/button";
+import { toast } from "react-toastify";
+import { countries as countryData } from "country-data";
+import image from "../../../../assets/svg/hand.svg";
+import { TokenModal } from "../../../../shared/modal/TokenModal";
+import ReactLoading from "react-loading";
+import { SuccessModal } from "../../../../shared/modal/SuccessModal";
 
 interface SignUpProps {
   emailInputProps?: {
@@ -18,17 +30,37 @@ interface SignUpProps {
   passwordType?: "password" | "text";
 }
 
+const getCountries = () =>
+  countryData.all.map((country: any) => ({
+    name: country.name,
+  }));
+
 const SignUp: React.FC<SignUpProps> = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [passwordValue, setPasswordValue] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [country, setCountry] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
-  const [passwordType, setPasswordType] = useState("password");
-  const [confirmPasswordType, setConfirmPasswordType] = useState("password");
+  const [passwordType, setPasswordType] = useState<"password" | "text">(
+    "password",
+  );
+  const [confirmPasswordType, setConfirmPasswordType] = useState<
+    "password" | "text"
+  >("password");
+  const [loading, setLoading] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState("token");
+  const [token, setToken] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
 
   const togglePasswordVisibility = () => {
     setPasswordType((prevType) =>
@@ -43,7 +75,7 @@ const SignUp: React.FC<SignUpProps> = () => {
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordValue(event.target.value);
+    setPassword(event.target.value);
   };
 
   const handleConfirmPasswordChange = (
@@ -52,8 +84,113 @@ const SignUp: React.FC<SignUpProps> = () => {
     setConfirmPasswordValue(event.target.value);
   };
 
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
   const Home = () => {
     navigate("/");
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setToken("");
+  };
+
+  const registerUser = useAppSelector(
+    (state: any) => state.landing.getUserRegistered,
+  );
+  console.log("registerUser", registerUser);
+  const areFieldsFilled = () => {
+    return (
+      firstName &&
+      lastName &&
+      email &&
+      country &&
+      phoneNumber &&
+      password &&
+      confirmPasswordValue
+    );
+  };
+
+  const registerUserData: React.FormEventHandler<HTMLFormElement> = async (
+    event,
+  ) => {
+    event.preventDefault();
+
+    if (!areFieldsFilled()) {
+      toast.error("All fields must be filled");
+      return;
+    }
+
+    if (password !== confirmPasswordValue) {
+      toast.error("Passwords do not match");
+      return;
+    }
+    setLoading(true);
+    const body = {
+      firstName,
+      lastName,
+      email,
+      country,
+      phoneNumber,
+      password,
+    };
+    dispatch(RegisterUser(body))
+      .unwrap()
+      .then(() => {
+        setLoading(false);
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setCountry("");
+        setPhoneNumber("");
+        setPassword("");
+        setConfirmPasswordValue("");
+        setIsModalOpen(true);
+        setToken("");
+      })
+      .catch((error) => {
+        if (error.statusCode === 400) {
+          toast.error(error.message);
+        } else {
+          toast.error(
+            error.message || "An error occurred. Please try again later.",
+          );
+        }
+        setLoading(false);
+      });
+    setUserEmail(email);
+  };
+
+  const handleTokenChange = (tokenValue: string) => {
+    setToken(tokenValue.slice(0, 6));
+  };
+
+  const verifyUserData = async (email: string, token: string) => {
+    setLoading(true);
+    const body = { email, token };
+    dispatch(VerifyUserAuth(body))
+      .unwrap()
+      .then(() => {
+        setModalType("proceed");
+        setIsModalOpen(false);
+        toast.success("User verified successfully");
+      })
+      .catch((error) => {
+        toast.error(error.message || "Invalid OTP, please try again");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const handleVerifyUser = async () => {
+    if (token.length === 6) {
+      await verifyUserData(userEmail, token);
+    } else {
+      toast.error("Invalid token");
+    }
   };
 
   return (
@@ -79,7 +216,10 @@ const SignUp: React.FC<SignUpProps> = () => {
               Register with the right details to start using the platform
             </p>
           </div>
-          <form action="login" className="mt-[1.5em] w-full text-logintext">
+          <form
+            className="mt-[1.5em] w-full text-logintext"
+            onSubmit={registerUserData}
+          >
             <div className="flex gap-3 sm:flex-col lg:flex-row">
               <div className="w-full">
                 <label htmlFor="firstName" className="flex-start flex">
@@ -88,6 +228,8 @@ const SignUp: React.FC<SignUpProps> = () => {
                 <input
                   name="firstName"
                   id="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                 />
               </div>
@@ -99,7 +241,9 @@ const SignUp: React.FC<SignUpProps> = () => {
                   name="lastName"
                   id="lastName"
                   type="text"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className=" mt-[1em] w-full rounded-lg border-[2px] bg-inherit p-3 focus:border-side focus:outline-none"
                 />
               </div>
             </div>
@@ -112,20 +256,34 @@ const SignUp: React.FC<SignUpProps> = () => {
                 name="email"
                 id="email"
                 type="email"
+                value={email}
+                onChange={handleEmailChange}
                 className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
               />
             </div>
 
-            <div className="mt-[1em]  flex gap-3 sm:flex-col lg:flex-row">
+            <div className="mt-[1em] flex gap-3 sm:flex-col lg:flex-row">
               <div className="w-full">
                 <label htmlFor="country" className="flex-start flex">
                   Country
                 </label>
-                <input
-                  name="country"
+                <select
+                  className="mt-[1em] flex w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
+                  value={country}
                   id="country"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
-                />
+                  name="country"
+                  onChange={(e) => setCountry(e.target.value)}
+                >
+                  {getCountries().map((country: any) => (
+                    <option
+                      className="bg-purpleblack text-text"
+                      key={country.code}
+                      value={country.code}
+                    >
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="w-full">
                 <label htmlFor="phoneNumber" className="flex-start flex">
@@ -134,8 +292,10 @@ const SignUp: React.FC<SignUpProps> = () => {
                 <input
                   name="phoneNumber"
                   id="phoneNumber"
-                  type="number"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 text-text focus:border-side focus:outline-none"
                 />
               </div>
             </div>
@@ -150,9 +310,9 @@ const SignUp: React.FC<SignUpProps> = () => {
                     name="password"
                     id="password"
                     type={passwordType}
-                    value={passwordValue}
+                    value={password}
                     onChange={handlePasswordChange}
-                    className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
+                    className="mt-[1em] flex w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                   />
                   <button
                     type="button"
@@ -178,7 +338,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                     type={confirmPasswordType}
                     value={confirmPasswordValue}
                     onChange={handleConfirmPasswordChange}
-                    className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
+                    className="mt-[1em] flex w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                   />
                   <button
                     type="button"
@@ -194,12 +354,25 @@ const SignUp: React.FC<SignUpProps> = () => {
                 </div>
               </div>
             </div>
+            <div className="mt-[4em] text-center">
+              <button.PrimaryButton
+                type="submit"
+                className={`w-[70%] ${!areFieldsFilled() ? "bg-disabledPrimary cursor-not-allowed" : "text-text"}`}
+                disabled={!areFieldsFilled() || loading}
+              >
+                {loading ? (
+                  <ReactLoading
+                    color="#FFFFFF"
+                    width={25}
+                    height={25}
+                    type="spin"
+                  />
+                ) : (
+                  "Create Account"
+                )}
+              </button.PrimaryButton>
+            </div>
           </form>
-          <div className="mt-[4em] text-center">
-            <button.PrimaryButton className="w-[70%]">
-              Create account
-            </button.PrimaryButton>
-          </div>
           <section className="mt-[1.5em] items-center text-center ">
             <p className="font-br-light">
               Already have an account?
@@ -210,6 +383,23 @@ const SignUp: React.FC<SignUpProps> = () => {
           </section>
         </section>
       </section>
+      {isModalOpen && (
+        <TokenModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          handleTokenChange={handleTokenChange}
+          token={token}
+          handleVerifyUser={handleVerifyUser}
+        />
+      )}
+
+      {modalType === "proceed" && (
+        <SuccessModal
+          isOpen={true}
+          onClose={() => setModalType("")}
+          setModalType={setModalType}
+        />
+      )}
     </main>
   );
 };

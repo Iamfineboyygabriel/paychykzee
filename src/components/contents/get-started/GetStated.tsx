@@ -7,6 +7,7 @@ const GetStarted = () => {
   const SignUp = () => {
     navigate("/sign-up");
   };
+
   return (
     <div>
       <main className="w-full font-br-regular">
@@ -25,7 +26,7 @@ const GetStarted = () => {
               </article>
             </div>
             <div className="mt-[1.5em]">
-              <button.PrimaryButton onClick={SignUp} className="text-text">
+              <button.PrimaryButton className="text-text">
                 Create account
               </button.PrimaryButton>
             </div>

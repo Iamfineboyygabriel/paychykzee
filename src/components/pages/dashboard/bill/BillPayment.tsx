@@ -123,11 +123,11 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
 const BillPayment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const openModal = () => {
+  const openModal = async () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setIsModalOpen(false);
   };
 

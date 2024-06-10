@@ -3,10 +3,12 @@ import { createPortal } from "react-dom";
 import { AiOutlineClose } from "react-icons/ai";
 
 interface ModalProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   isOpen: boolean;
   onClose: () => void;
+  userEmail?: string;
+  setModalType?: (modalType: string) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -14,6 +16,7 @@ const Modal: React.FC<ModalProps> = ({
   className,
   isOpen,
   onClose,
+  setModalType,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -21,12 +24,14 @@ const Modal: React.FC<ModalProps> = ({
     function handleEscapeKeyPress(event: KeyboardEvent) {
       if (event.key === "Escape") {
         onClose();
+        setModalType && setModalType(""); // Add this line
       }
     }
 
     function handleClickOutside(event: MouseEvent | TouchEvent) {
       if (ref.current && !ref.current.contains(event.target as Node)) {
         onClose();
+        setModalType && setModalType(""); // Add this line
       }
     }
 
@@ -41,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({
       document.removeEventListener("mousedown", handleClickOutside, true);
       document.removeEventListener("touchstart", handleClickOutside, true);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, setModalType]);
 
   return isOpen
     ? createPortal(
@@ -56,6 +61,7 @@ const Modal: React.FC<ModalProps> = ({
             >
               <AiOutlineClose size={24} />
             </button>
+
             <div>{children}</div>
           </div>
         </div>,

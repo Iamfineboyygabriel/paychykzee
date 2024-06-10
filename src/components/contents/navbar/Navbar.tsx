@@ -17,7 +17,7 @@ const Navbar = () => {
     setShowMenu(!showMenu);
   };
 
-  const Create = () => {
+  const sign = async () => {
     navigate("/sign-up");
   };
 
@@ -27,7 +27,7 @@ const Navbar = () => {
         <header>
           <img src={logo} alt="" />
         </header>
-        <div className="hidden  items-center gap-7 lg:flex">
+        <div className="hidden items-center gap-7 lg:flex">
           <ScrollLink
             className="cursor-pointer text-text"
             to="services"
@@ -56,7 +56,7 @@ const Navbar = () => {
             Login
           </Link>
           <div>
-            <button.PrimaryButton onClick={Create} className="text-text">
+            <button.PrimaryButton onClick={sign} className="text-text">
               Create account
             </button.PrimaryButton>
           </div>
@@ -120,7 +120,7 @@ const Navbar = () => {
               Login
             </Link>
 
-            <button.PrimaryButton className="text-text">
+            <button.PrimaryButton className="text-text" onClick={sign}>
               Create account
             </button.PrimaryButton>
           </motion.div>

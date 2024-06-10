@@ -4,11 +4,11 @@ import { button } from "../../../../shared/button/button";
 const Home = () => {
   const navigate = useNavigate();
 
-  const peer = () => {
+  const peer = async () => {
     navigate("/dashboard/peer-to-peer");
   };
 
-  const bill = () => {
+  const bill = async () => {
     navigate("/dashboard/bill-payment");
   };
 

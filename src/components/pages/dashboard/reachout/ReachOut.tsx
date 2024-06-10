@@ -8,15 +8,15 @@ const ReachOut = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
-  const openModal = () => {
+  const openModal = async () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const closeModal = async () => {
     setIsModalOpen(false);
   };
 
-  const dashboard = () => {
+  const dashboard = async () => {
     navigate("/dashboard/home");
   };
 
