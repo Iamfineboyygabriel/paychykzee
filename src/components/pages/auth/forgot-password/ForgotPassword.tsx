@@ -20,7 +20,6 @@ const ForgotPassword = () => {
         email,
       });
       setLoading(false);
-      console.log(response);
 
       if (
         response?.status === 200 &&
@@ -34,14 +33,6 @@ const ForgotPassword = () => {
     } catch (error: any) {
       setLoading(false);
       toast.error(error.message);
-
-      toast.error(String(error));
-      // console.error(error);
-      // if (error.response) {
-      //   toast.error(error.response.data.message || "An error occurred");
-      // } else {
-      //   toast.error("Network error. Please check your internet connection");
-      // }
     }
   };
 

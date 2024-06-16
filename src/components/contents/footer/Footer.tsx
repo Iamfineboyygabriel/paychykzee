@@ -35,7 +35,7 @@ export const Footer = () => {
           </div>
           <div className="flex items-center gap-2">
             <img src={mobile} alt="mobile-icon" />
-            +444 356 988
+            +44 7904 328720
           </div>
           <div className="flex items-center gap-2">
             <img src={location} alt="mobile-icon" />

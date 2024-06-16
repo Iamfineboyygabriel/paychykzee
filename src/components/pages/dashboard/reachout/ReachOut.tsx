@@ -1,23 +1,55 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { button } from "../../../../shared/button/button";
 import Modal from "../../../../shared/modal/Modal";
 import image from "../../../../assets/svg/success.svg";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import landingServices from "../../../../shared/redux/services/landing.services";
+import { toast } from "react-toastify";
+import ReactLoading from "react-loading";
 
 const ReachOut = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
-  const openModal = async () => {
+  const openModal = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = async () => {
+  const closeModal = () => {
     setIsModalOpen(false);
   };
 
   const dashboard = async () => {
     navigate("/dashboard/home");
+  };
+
+  const ContactUs = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    const endpoint = `${process.env.REACT_APP_API_URL}/users/contact`;
+
+    try {
+      const response: any = await landingServices.Reach_Out(endpoint, {
+        message,
+      });
+      setLoading(false);
+      console.log(response);
+
+      if (response?.status === 201) {
+        toast.success("Message sent successfully");
+        setMessage("");
+        openModal();
+      } else {
+        toast.error("An error occurred");
+      }
+    } catch (error: any) {
+      console.log("error contacting", error);
+      setLoading(false);
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -30,13 +62,24 @@ const ReachOut = () => {
             <textarea
               name="contact"
               id="contact"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               placeholder="Describe your message"
               className="h-[20em] w-full rounded-md border-[1px] border-border bg-inherit bg-input p-3 placeholder:text-sm placeholder:text-textp"
             ></textarea>
           </div>
           <div className="mt-[3em] px-[2em]">
-            <button.PrimaryButton className="w-full" onClick={openModal}>
-              Send message
+            <button.PrimaryButton className="w-full" onClick={ContactUs}>
+              {loading ? (
+                <ReactLoading
+                  color="#FFFFFF"
+                  width={25}
+                  height={25}
+                  type="spin"
+                />
+              ) : (
+                "Send Message"
+              )}
             </button.PrimaryButton>
           </div>
         </div>

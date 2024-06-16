@@ -45,6 +45,7 @@ export interface LandingServices {
     exchangeFee: number;
     rate: number;
   }) => Promise<unknown>;
+  Reach_Out: (endpoint: string, body: { message: string }) => Promise<unknown>;
 }
 
 const landingServices: LandingServices = {
@@ -130,6 +131,18 @@ const landingServices: LandingServices = {
     } catch (error: unknown) {
       throw new Error(
         `Error peering: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  },
+  Reach_Out: async (endpoint, body) => {
+    try {
+      const response = await axios.post(endpoint, body, {
+        headers: authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        `Error sending message: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   },

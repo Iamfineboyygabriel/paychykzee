@@ -1,4 +1,4 @@
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import activehome from "../../../assets/svg/dashboard-icon.svg";
 import inactivehome from "../../../assets/svg/inactive-home.svg";
 import inactivepeer from "../../../assets/svg/inactivepeer.svg";
@@ -8,8 +8,6 @@ import activebill from "../../../assets/svg/active-bill.svg";
 import contact from "../../../assets/svg/contact.svg";
 
 const Sidebar = () => {
-  // const location = useLocation().pathname;
-
   return (
     <aside className="hidden min-h-full w-64 bg-dashboard text-white lg:block">
       <div className="py-[2em]">

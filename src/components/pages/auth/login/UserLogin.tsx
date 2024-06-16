@@ -71,7 +71,6 @@ const UserLogin: React.FC<UserLoginProps> = () => {
       navigate("/dashboard/home");
       toast.success("Login successful");
     } catch (error: any) {
-      console.error("Error:", error);
       setLoading(false);
       const errorMessage =
         error.response?.data?.message || "Invalid credentials";
@@ -88,7 +87,6 @@ const UserLogin: React.FC<UserLoginProps> = () => {
     }
   };
 
-  
   useEffect(() => {
     const storedEmail = sessionStorage.getItem("email");
     const storedPassword = sessionStorage.getItem("password");
