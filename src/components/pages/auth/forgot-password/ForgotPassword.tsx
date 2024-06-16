@@ -33,12 +33,15 @@ const ForgotPassword = () => {
       }
     } catch (error: any) {
       setLoading(false);
-      console.error(error);
-      if (error.response) {
-        toast.error(error.response.data.message || "An error occurred");
-      } else {
-        toast.error("Network error. Please check your internet connection");
-      }
+      toast.error(error.message);
+
+      toast.error(String(error));
+      // console.error(error);
+      // if (error.response) {
+      //   toast.error(error.response.data.message || "An error occurred");
+      // } else {
+      //   toast.error("Network error. Please check your internet connection");
+      // }
     }
   };
 

@@ -16,8 +16,11 @@ export const RegisterUser = createAsyncThunk(
       const message =
         (error.response &&
           error.response.data &&
-          error.response.data.message) ||
+          error.response.data.message &&
+          error.response.message) ||
         error.message ||
+        error.data.message ||
+        error.data ||
         error.toString();
       thunkAPI.dispatch(setMessage(message));
       return thunkAPI.rejectWithValue(message);
@@ -62,10 +65,52 @@ export const LoginUser = createAsyncThunk(
   },
 );
 
+export const PaymentRate = createAsyncThunk(
+  "landing/paymentRate",
+  async (body: { baseCurrency: string; pairCurrency: string }, thunkAPI) => {
+    try {
+      const data = await LandingServices.Payment_Rate(body);
+      return data;
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
+export const PeerToPeer = createAsyncThunk(
+  "landing/peer",
+  async (
+    body: {
+      baseCurrency: string;
+      baseAmount: number;
+      pairCurrency: string;
+      pairAmount: number;
+      exchangeFee: number;
+      rate: number;
+    },
+    thunkAPI,
+  ) => {
+    try {
+      const data = await LandingServices.PeerToPeer(body);
+      return data;
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
 export const initialState = {
   getUserRegistered: null,
   verifyAuthData: null,
   getloginUser: null,
+  paymentRate: null,
+  pair: null,
 };
 
 export const userSlice = createSlice({
@@ -90,6 +135,18 @@ export const userSlice = createSlice({
     });
     builder.addCase(LoginUser.rejected, (state) => {
       state.getloginUser = null;
+    });
+    builder.addCase(PaymentRate.fulfilled, (state, action) => {
+      state.paymentRate = action.payload as null;
+    });
+    builder.addCase(PaymentRate.rejected, (state) => {
+      state.paymentRate = null;
+    });
+    builder.addCase(PeerToPeer.fulfilled, (state, action) => {
+      state.pair = action.payload as null;
+    });
+    builder.addCase(PeerToPeer.rejected, (state) => {
+      state.pair = null;
     });
   },
 });

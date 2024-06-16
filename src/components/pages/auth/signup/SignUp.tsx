@@ -149,7 +149,7 @@ const SignUp: React.FC<SignUpProps> = () => {
         setConfirmPasswordValue("");
         setIsModalOpen(true);
         setToken("");
-      })      
+      })
       .catch((error) => {
         if (
           error.response &&
@@ -175,19 +175,16 @@ const SignUp: React.FC<SignUpProps> = () => {
   const verifyUserData = async (email: string, token: string) => {
     setLoading(true);
     const body = { email, token };
-    dispatch(VerifyUserAuth(body))
-      .unwrap()
-      .then(() => {
-        setModalType("proceed");
-        setIsModalOpen(false);
-        toast.success("User verified successfully");
-      })
-      .catch((error) => {
-        toast.error(error.message || "Invalid OTP, please try again");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      await dispatch(VerifyUserAuth(body)).unwrap();
+      setModalType("proceed");
+      setIsModalOpen(false);
+      toast.success("User verified successfully");
+    } catch (error) {
+      toast.error(String(error));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerifyUser = async () => {
@@ -362,7 +359,7 @@ const SignUp: React.FC<SignUpProps> = () => {
             <div className="mt-[4em] text-center">
               <button.PrimaryButton
                 type="submit"
-                className={`w-full lg:w-[70%] ${!areFieldsFilled() ? "bg-disabledPrimary cursor-not-allowed" : "text-text"}`}
+                className={`w-full lg:w-[70%] ${!areFieldsFilled() ? "cursor-not-allowed bg-disabledPrimary" : "text-text"}`}
                 disabled={!areFieldsFilled() || loading}
               >
                 {loading ? (

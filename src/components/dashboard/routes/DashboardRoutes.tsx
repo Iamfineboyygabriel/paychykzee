@@ -13,7 +13,19 @@ const DashboardRoutes = () => {
     <DashboardLayout>
       <Routes>
         <Route path="home" element={<Home />} />
-        <Route path="peer-to-peer" element={<Peer />} />
+        <Route
+          path="peer-to-peer"
+          element={
+            <Peer
+              // baseCurrency={null}
+              // baseAmount={0}
+              // peerCurrency={null}
+              // peerAmount={0}
+              // exchangeFee={0}
+              // rate={0}
+            />
+          }
+        />
         <Route path="bill-payment" element={<BillPayment />} />
         <Route path="reach-out" element={<ReachOut />} />
         <Route path="settings/*" element={<Settings />}>

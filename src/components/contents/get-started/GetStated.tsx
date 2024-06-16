@@ -4,7 +4,7 @@ import { button } from "../../../shared/button/button";
 
 const GetStarted = () => {
   const navigate = useNavigate();
-  const SignUp = () => {
+  const SignUp = async () => {
     navigate("/sign-up");
   };
 
@@ -26,7 +26,7 @@ const GetStarted = () => {
               </article>
             </div>
             <div className="mt-[1.5em]">
-              <button.PrimaryButton className="text-text">
+              <button.PrimaryButton className="text-text" onClick={SignUp}>
                 Create account
               </button.PrimaryButton>
             </div>

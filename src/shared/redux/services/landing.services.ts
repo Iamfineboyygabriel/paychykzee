@@ -5,6 +5,8 @@ import { AxiosResponse } from "axios";
 const API_URL_REGISTER_USER = process.env.REACT_APP_API_URL + "/auth/register";
 const API_URL_VERIFY_USER = process.env.REACT_APP_API_URL + "/auth/verifyToken";
 const API_URL_LOGIN_USER = process.env.REACT_APP_API_URL + "/auth/login";
+const API_URL_PAYMENT_RATE = process.env.REACT_APP_API_URL + "/payment/rate";
+const API_URL_PEER_TO_PEER = process.env.REACT_APP_API_URL + "/payment/p2p";
 
 export interface RegisterUserRequestBody {
   firstName: string;
@@ -31,6 +33,18 @@ export interface LandingServices {
     endpoint: string,
     data: any,
   ) => Promise<AxiosResponse<ResetPasswordResponse, any>>;
+  Payment_Rate: (body: {
+    baseCurrency: string;
+    pairCurrency: string;
+  }) => Promise<unknown>;
+  PeerToPeer: (body: {
+    baseCurrency: string;
+    baseAmount: number;
+    pairCurrency: string;
+    pairAmount: number;
+    exchangeFee: number;
+    rate: number;
+  }) => Promise<unknown>;
 }
 
 const landingServices: LandingServices = {
@@ -61,7 +75,7 @@ const landingServices: LandingServices = {
   LoginUser: async (body) => {
     try {
       const response = await axios.post(API_URL_LOGIN_USER, body, {});
-      const token = response.data.token;
+      const token = response.data.data.accessTokenEncrypt;
       if (token) {
         sessionStorage.setItem("userData", token);
         return response.data;
@@ -70,7 +84,7 @@ const landingServices: LandingServices = {
       }
     } catch (error) {
       throw new Error(
-        `Error loggin in: ${error instanceof Error ? error.message : String(error)}`,
+        `Error logging in: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   },
@@ -92,6 +106,30 @@ const landingServices: LandingServices = {
     } catch (error) {
       throw new Error(
         `Error Reseting Password: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  },
+  Payment_Rate: async (body) => {
+    try {
+      const response = await axios.post(API_URL_PAYMENT_RATE, body, {
+        headers: authHeader(),
+      });
+      return response.data;
+    } catch (error: unknown) {
+      throw new Error(
+        `Error fetching rate: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  },
+  PeerToPeer: async (body) => {
+    try {
+      const response = await axios.post(API_URL_PEER_TO_PEER, body, {
+        headers: authHeader(),
+      });
+      return response.data;
+    } catch (error: unknown) {
+      throw new Error(
+        `Error peering: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   },

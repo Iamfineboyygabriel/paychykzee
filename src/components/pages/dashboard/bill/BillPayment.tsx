@@ -1,10 +1,17 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import upload from "../../../../assets/svg/upload.svg";
 import dot from "../../../../assets/svg/dot.svg";
 import document from "../../../../assets/svg/document-successfull.svg";
 import { button } from "../../../../shared/button/button";
 import exclamation from "../../../../assets/svg/exclamation.svg";
 import Modal from "../../../../shared/modal/Modal";
+import { countries as countryData } from "country-data";
+import Flag from "react-world-flags";
+
+interface Country {
+  name: string;
+  code: string;
+}
 
 interface FileUploaderProps {
   onFileChange: (files: File[]) => void;
@@ -123,6 +130,38 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
 const BillPayment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const countryList: Country[] = countryData.all.map((country: any) => ({
+    name: country.name,
+    code: country.alpha2,
+  }));
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleCountrySelect = (country: Country) => {
+    setSelectedCountry(country);
+    setIsDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const openModal = async () => {
     setIsModalOpen(true);
   };
@@ -159,12 +198,54 @@ const BillPayment = () => {
                 >
                   Country
                 </label>
-                <input
-                  name="country"
-                  id="country"
-                  type="text"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3"
-                />
+                <div className="relative mt-[1em]">
+                  <button
+                    type="button"
+                    className="w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3 text-left"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    {selectedCountry ? (
+                      <div className="flex items-center">
+                        <Flag
+                          code={selectedCountry.code}
+                          key={selectedCountry.code}
+                          style={{
+                            width: "32px",
+                            height: "32px",
+                            marginRight: "8px",
+                          }}
+                        />
+                        {selectedCountry.name}
+                      </div>
+                    ) : (
+                      "Select a country"
+                    )}
+                  </button>
+                  {isDropdownOpen && (
+                    <div
+                      ref={dropdownRef}
+                      className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input"
+                    >
+                      {countryList.map((country) => (
+                        <div
+                          key={country.code}
+                          className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
+                          onClick={() => handleCountrySelect(country)}
+                        >
+                          <Flag
+                            code={country.code}
+                            style={{
+                              width: "32px",
+                              height: "32px",
+                              marginRight: "8px",
+                            }}
+                          />
+                          {country.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -185,7 +266,7 @@ const BillPayment = () => {
                 <input
                   name="currency"
                   id="currency"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3" // Added margin-top here
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
                 />
               </div>
               <div className="w-full">
@@ -199,7 +280,7 @@ const BillPayment = () => {
                   name="amount"
                   id="amount"
                   type="text"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3" // Added margin-top here
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
                 />
               </div>
             </div>

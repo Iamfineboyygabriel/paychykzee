@@ -29,6 +29,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
     } finally {
       setLoading(false);
     }
+    
   };
 
   return (

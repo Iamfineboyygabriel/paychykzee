@@ -64,7 +64,6 @@ const UserLogin: React.FC<UserLoginProps> = () => {
       email,
       password,
     };
-
     try {
       const response = await dispatch(LoginUser(body)).unwrap();
       console.log("Response:", response);
@@ -78,7 +77,6 @@ const UserLogin: React.FC<UserLoginProps> = () => {
         error.response?.data?.message || "Invalid credentials";
       toast.error(errorMessage);
     }
-
     if (rememberMe) {
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("password", password);
@@ -90,6 +88,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
     }
   };
 
+  
   useEffect(() => {
     const storedEmail = sessionStorage.getItem("email");
     const storedPassword = sessionStorage.getItem("password");

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const HeroSection = () => {
   const navigate = useNavigate();
 
-  const signUp = () => {
+  const signUp = async () => {
     navigate("/sign-up");
   };
 
@@ -33,7 +33,7 @@ const HeroSection = () => {
           </p>
         </article>
         <div className="mt-[2em]">
-          <button.PrimaryButton className="text-text" onSubmit={signUp}>
+          <button.PrimaryButton className="text-text" onClick={signUp}>
             Create account
           </button.PrimaryButton>
         </div>
