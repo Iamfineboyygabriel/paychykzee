@@ -52,6 +52,8 @@ const ReachOut = () => {
     }
   };
 
+  const isButtonDisabled = message.trim() === "";
+
   return (
     <div className="font-br-regular">
       <h1 className="font-br-semibold text-2xl">Contact</h1>
@@ -69,7 +71,11 @@ const ReachOut = () => {
             ></textarea>
           </div>
           <div className="mt-[3em] px-[2em]">
-            <button.PrimaryButton className="w-full" onClick={ContactUs}>
+            <button.PrimaryButton
+              className={`w-full ${isButtonDisabled ? "cursor-not-allowed bg-disabledPrimary text-gray-400" : "bg-primary text-text"}`}
+              onClick={ContactUs}
+              disabled={isButtonDisabled}
+            >
               {loading ? (
                 <ReactLoading
                   color="#FFFFFF"

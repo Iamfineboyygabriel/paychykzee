@@ -45,6 +45,7 @@ const Peer = () => {
   const [rate, setRate] = useState("");
   const [exchangeFee, setExchangeFee] = useState("5");
   const [redirectUrl, setRedirectUrl] = useState("");
+  const [currencyLoading, setCurrencyLoading] = useState(true);
 
   const dropdownRef = useRef(null);
 
@@ -67,10 +68,14 @@ const Peer = () => {
 
   useEffect(() => {
     if (userToken) {
+      setCurrencyLoading(true);
       dispatch(GetCurrencies())
         .unwrap()
-        .then(() => {})
+        .then(() => {
+          setCurrencyLoading(false);
+        })
         .catch((error: { message: any }) => {
+          setCurrencyLoading(false);
           const errorMessage = error.message;
           dispatch(setMessage(errorMessage));
           toast.error(errorMessage);
@@ -86,6 +91,7 @@ const Peer = () => {
         !(dropdownRef.current as Node).contains(event.target as Node)
       ) {
         setIsBaseDropdownOpen(false);
+        setisPairDropdownOpen(false);
       }
     };
 
@@ -237,12 +243,23 @@ const Peer = () => {
                   </label>
                   <div className="relative mt-[1em]">
                     <button
-                      type="button"
-                      name="BaseCurrency"
                       className="w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3 text-left text-textp"
                       onClick={() => setIsBaseDropdownOpen(!isBaseDropdownOpen)}
+                      disabled={currencyLoading}
                     >
-                      {baseCurrency ? baseCurrency.name : "Select a currency"}
+                      {currencyLoading ? (
+                        <div className="flex items-center justify-start">
+                          <ReactLoading
+                            type="spin"
+                            color="#FFFFFF"
+                            height={20}
+                            width={20}
+                          />
+                          <span className="ml-2">Loading...</span>
+                        </div>
+                      ) : (
+                        baseCurrency?.name || "Select base currency"
+                      )}
                     </button>
                     {isBaseDropdownOpen && (
                       <div
@@ -280,7 +297,7 @@ const Peer = () => {
                       type="text"
                       value={baseAmount}
                       onChange={handleBaseAmountChange}
-                      className="flex-1 rounded-lg border-[2px] border-border bg-inherit bg-input p-3 pl-10" // Add pl-10 for additional left padding
+                      className="flex-1 rounded-lg border-[2px] border-border bg-inherit bg-input p-3 pl-10 focus:border-border focus:bg-inherit focus:outline-none"
                       style={{ textAlign: "right" }}
                     />
                   </div>
@@ -305,10 +322,23 @@ const Peer = () => {
                     <button
                       type="button"
                       name="peerCurrency"
+                      disabled={currencyLoading}
                       className="w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3 text-left text-textp"
                       onClick={() => setisPairDropdownOpen(!isPairDropdownOpen)}
                     >
-                      {pairCurrency ? pairCurrency.name : "Select a currency"}
+                      {currencyLoading ? (
+                        <div className="flex items-center justify-start">
+                          <ReactLoading
+                            type="spin"
+                            color="#FFFFFF"
+                            height={20}
+                            width={20}
+                          />
+                          <span className="ml-2">Loading...</span>
+                        </div>
+                      ) : (
+                        pairCurrency?.name || "Select pair currency"
+                      )}
                     </button>
                     {isPairDropdownOpen && (
                       <div
@@ -345,7 +375,7 @@ const Peer = () => {
                       name="amount"
                       value={pairAmount}
                       disabled
-                      className="flex-1 rounded-lg border-[2px] border-border bg-inherit bg-input p-3 pl-10" // Add pl-10 for additional left padding
+                      className="flex-1 rounded-lg border-[2px] border-border bg-inherit bg-input p-3 pl-10"
                       style={{ textAlign: "right" }}
                     />
                   </div>
@@ -413,6 +443,7 @@ const Peer = () => {
                         name="amount"
                         id="amount"
                         type="text"
+                        disabled
                         value={baseAmount}
                         className="flex-1 rounded-lg border-[2px] border-side bg-inherit bg-input p-3 pl-10 text-xl font-semibold text-text"
                         style={{ textAlign: "right" }}

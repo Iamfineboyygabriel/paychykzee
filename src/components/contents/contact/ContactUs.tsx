@@ -62,7 +62,7 @@ const ContactUs = () => {
               <textarea
                 id="message"
                 placeholder="Describe your message"
-                className="h-[180px]  border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:outline-none"
+                className="h-[180px]  border border-border bg-inherit p-2 placeholder:text-border focus:border-border focus:outline-none"
               ></textarea>
             </div>
             <div className="mt-[1.5em]">
