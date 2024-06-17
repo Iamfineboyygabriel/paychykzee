@@ -397,7 +397,11 @@ const Peer = () => {
               <div className="flex justify-center sm:mt-[2em] lg:mt-[7em]">
                 <button.PrimaryButton
                   type="button"
-                  className="w-full lg:w-[80%]"
+                  className={`w-full lg:w-[80%] ${
+                    !baseCurrency || !pairCurrency || !baseAmount.trim()
+                      ? "bg- disabledPrimary cursor-not-allowed text-gray-400"
+                      : "text-text"
+                  }`}
                   onClick={openModal}
                   disabled={
                     !baseCurrency || !pairCurrency || !baseAmount.trim()
