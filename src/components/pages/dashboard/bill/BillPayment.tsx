@@ -31,19 +31,33 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
     setDragOver(false);
   };
 
+  // const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  //   e.preventDefault();
+  //   setDragOver(false);
+  //   const uploadedFiles = Array.from(e.dataTransfer.files);
+  //   setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
+  //   onFileChange([...files, ...uploadedFiles]);
+  // };
+
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
     const uploadedFiles = Array.from(e.dataTransfer.files);
-    setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
-    onFileChange([...files, ...uploadedFiles]);
+    setFiles(uploadedFiles);
+    onFileChange(uploadedFiles);
   };
 
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const uploadedFiles = Array.from(e.target.files || []);
+  //   setFiles(uploadedFiles);
+  //   onFileChange(uploadedFiles);
+  // };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFiles = Array.from(e.target.files || []);
     setFiles(uploadedFiles);
     onFileChange(uploadedFiles);
   };
+
 
   const handleClickDoc = () => {
     documentDoc.current?.click();

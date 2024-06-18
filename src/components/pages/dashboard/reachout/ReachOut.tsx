@@ -36,10 +36,8 @@ const ReachOut = () => {
         message,
       });
       setLoading(false);
-      console.log(response);
 
       if (response?.status === 201) {
-        toast.success("Message sent successfully");
         setMessage("");
         openModal();
       } else {

@@ -7,6 +7,7 @@ import DashboardRoutes from "./components/dashboard/routes/DashboardRoutes";
 import NewPassword from "./components/pages/auth/forgot-password/NewPassword";
 import Updated from "./components/pages/auth/forgot-password/Updated";
 import ResetOtp from "./components/pages/auth/forgot-password/ResetOtp";
+import ProtectedRoute from "./protected/ProtectedRoute";
 
 function App() {
   return (
@@ -19,7 +20,9 @@ function App() {
         <Route path="/new-password" element={<NewPassword />} />
         <Route path="/reset-otp" element={<ResetOtp />} />
         <Route path="/reset-successfull" element={<Updated />} />
-        <Route path="/dashboard/*" element={<DashboardRoutes />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard/*" element={<DashboardRoutes />} />
+        </Route>
       </Routes>
     </Router>
   );

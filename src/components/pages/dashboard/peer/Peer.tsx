@@ -1,18 +1,18 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCurrencies } from "../../../../shared/redux/slices/transaction.slices";
-import { toast } from "react-toastify";
-import { setMessage } from "../../../../shared/redux/slices/message.slices";
-import Modal from "../../../../shared/modal/Modal";
-import spin from "../../../../assets/svg/spin.svg";
-import exclamation from "../../../../assets/svg/exclamation.svg";
 import { ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
-import { button } from "../../../../shared/button/button";
-import ReactLoading from "react-loading";
+import { setMessage } from "../../../../shared/redux/slices/message.slices";
 import {
   PaymentRate,
   PeerToPeer,
 } from "../../../../shared/redux/slices/landing.slices";
+import Modal from "../../../../shared/modal/Modal";
+import { button } from "../../../../shared/button/button";
+import { toast } from "react-toastify";
+import ReactLoading from "react-loading";
+import spin from "../../../../assets/svg/spin.svg";
+import exclamation from "../../../../assets/svg/exclamation.svg";
 
 interface Currency {
   name: string;
@@ -46,6 +46,7 @@ const Peer = () => {
   const [exchangeFee, setExchangeFee] = useState("5");
   const [redirectUrl, setRedirectUrl] = useState("");
   const [currencyLoading, setCurrencyLoading] = useState(true);
+  const [rateLoading, setRateLoading] = useState(false);
 
   const dropdownRef = useRef(null);
 
@@ -127,6 +128,7 @@ const Peer = () => {
 
   const GetRate = async () => {
     if (baseCurrency && pairCurrency) {
+      setRateLoading(true);
       let body = {
         baseCurrency: baseCurrency?.code ?? "",
         pairCurrency: pairCurrency?.code ?? "",
@@ -136,7 +138,6 @@ const Peer = () => {
           PaymentRate(body),
         ).unwrap()) as RateResponse;
         const rate = response?.rate ?? 0;
-        // const exchangeFee = response?.exchangeFee ?? 0;
         setRate(rate.toString());
         setExchangeFee("5");
       } catch (error: any) {
@@ -144,6 +145,8 @@ const Peer = () => {
         const errorMessage =
           error.response?.data?.message || "Invalid credentials";
         toast.error(errorMessage);
+      } finally {
+        setRateLoading(false);
       }
     }
   };
@@ -385,10 +388,23 @@ const Peer = () => {
                 <p>
                   {baseCurrency?.code} / {pairCurrency?.code}
                 </p>
-                <div className="flex gap-3">
-                  <p>Rate:</p>
-                  <p className="font-br-semibold">{rate}</p>
+
+                <div className="mt-[2em]">
+                  <div className="flex items-center gap-3">
+                    <p>Rate:</p>
+                    {rateLoading ? (
+                      <ReactLoading
+                        type="spin"
+                        color="#FFFFFF"
+                        height={20}
+                        width={20}
+                      />
+                    ) : (
+                      <p className="font-br-semibold">{rate}</p>
+                    )}
+                  </div>
                 </div>
+
                 <div className="flex gap-3">
                   <p>Exchange Fee:</p>
                   <p className="font-br-semibold">{exchangeFee} USD</p>
