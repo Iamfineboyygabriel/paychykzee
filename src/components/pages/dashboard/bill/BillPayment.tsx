@@ -22,6 +22,7 @@ interface Country {
 }
 
 interface File {
+  secure_url: string;
   name: string;
   size: number;
 }
@@ -38,12 +39,21 @@ interface Billp {
     redirectUrl: string;
   };
 }
+interface UploadedFile {
+  secure_url: string;
+  name: string;
+  size: number;
+}
 
 interface FileUploaderProps {
   onFileChange: (files: File[]) => void;
+  setInvoiceDocument: (url: string) => void;
 }
 
-const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({
+  onFileChange,
+  setInvoiceDocument,
+}) => {
   const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const documentDoc = useRef<HTMLInputElement>(null);
@@ -58,56 +68,59 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
   const handleDragLeave = () => {
     setDragOver(false);
   };
-
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
-    const uploadedFiles = Array.from(e.dataTransfer.files);
+    const uploadedFiles = Array.from(e.dataTransfer.files) as unknown as File[];
     setFiles(uploadedFiles);
     if (uploadedFiles.length > 0) {
       try {
-        await uploadImageToCloudinary(uploadedFiles[0]);
+        setIsLoading(true);
+        const cloudinaryResponse = await uploadImageToCloudinary(
+          uploadedFiles[0],
+        );
+        console.log("Cloudinary response:", cloudinaryResponse); 
         onFileChange(
           uploadedFiles.map((file) => ({
             name: file.name,
             size: file.size,
+            secure_url: cloudinaryResponse, 
           })),
         );
       } catch (error) {
         console.error("Error uploading file:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const uploadedFiles = Array.from(e.target.files || []);
+    const uploadedFiles = Array.from(e.target.files || []) as unknown as File[];
     setFiles(uploadedFiles);
     if (uploadedFiles.length > 0) {
       try {
         setIsLoading(true);
-        await uploadImageToCloudinary(uploadedFiles[0]);
-        onFileChange(
-          uploadedFiles.map((file) => ({
-            name: file.name,
-            size: file.size,
-          })),
+        const cloudinaryResponses = await Promise.all(
+          uploadedFiles.map((file) => uploadImageToCloudinary(file)),
         );
+        const uploadedFilesWithUrl = uploadedFiles.map((file, index) => ({
+          name: file.name,
+          size: file.size,
+          secure_url: cloudinaryResponses[index],
+        }));
+        onFileChange(uploadedFilesWithUrl);
+        setInvoiceDocument(uploadedFilesWithUrl[0].secure_url);
       } catch (error) {
         console.error("Error uploading file:", error);
-        setIsLoading(false);
       } finally {
-        setIsLoading(false); // Set loading to false after upload completion or error
+        setIsLoading(false);
       }
     }
   };
 
   const handleClickDoc = () => {
     documentDoc.current?.click();
-  };
-
-  const formatFileSize = (size: number) => {
-    const i = Math.floor(Math.log(size) / Math.log(1024));
-    return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
   };
 
   const getCurrentDateTime = () => {
@@ -120,6 +133,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
       minute: "numeric",
       hour12: true,
     }).format(date);
+  };
+
+  const formatFileSize = (size: number) => {
+    const i = Math.floor(Math.log(size) / Math.log(1024));
+    return `${(size / Math.pow(1024, i)).toFixed(2)} ${
+      ["B", "kB", "MB", "GB", "TB"][i]
+    }`;
   };
 
   return (
@@ -189,14 +209,17 @@ const BillPayment = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCurrencyDropdown, setIsCurrencyDropdown] = useState(false);
   const [currencyLoading, setCurrencyLoading] = useState(true);
-  const [uploadedFileNames, setUploadedFileNames] = useState<File[]>([]);
+  const [uploadedFileNames, setUploadedFileNames] = useState<UploadedFile[]>(
+    [],
+  );
 
   const [description, setDescription] = useState("");
   const [country, setCountry] = useState<Country | null>(null);
   const [currency, setCurrency] = useState<Currency | null>(null);
   const [amount, setAmount] = useState("");
   const [paymentInstruction, setPaymentInstruction] = useState("");
-  const [invoiceDocument, setInvoiceDocument] = useState<string>("");
+  const [invoiceDocument, setInvoiceDocument] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const [redirectUrl, setRedirectUrl] = useState("");
@@ -308,10 +331,11 @@ const BillPayment = () => {
 
     setAmount(value);
   };
+
   const handleFileChange = (files: File[]) => {
     if (files.length > 0) {
       setUploadedFileNames(files);
-      setInvoiceDocument(files[0].name);
+      setInvoiceDocument(files[0].secure_url);
     } else {
       setUploadedFileNames([]);
       setInvoiceDocument("");
@@ -323,13 +347,14 @@ const BillPayment = () => {
   ): Promise<void> => {
     event.preventDefault();
     setLoading(true);
+
     let body = {
       description: description,
       country: country?.name ?? "",
       currency: currency?.code ?? "",
       amount: parseFloat(amount.replace(/,/g, "")),
       paymentInstruction,
-      invoiceDocument,
+      invoiceDocument: invoiceDocument,
     };
 
     try {
@@ -359,26 +384,27 @@ const BillPayment = () => {
     }).format(date);
   };
 
+  const formatFileSize = (size: number) => {
+    const i = Math.floor(Math.log(size) / Math.log(1024));
+    return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
+  };
+
   const isFormIncomplete =
     !description ||
     !country ||
     !currency ||
     !amount ||
-    !invoiceDocument ||
-    !paymentInstruction;
-
-  const formatFileSize = (size: number) => {
-    const i = Math.floor(Math.log(size) / Math.log(1024));
-    return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
-  };
+    !paymentInstruction ||
+    uploadedFileNames.length === 0;
 
   const clearFields = () => {
     setDescription("");
     setCountry(null);
     setCurrency(null);
     setAmount("");
-    setInvoiceDocument("");
     setPaymentInstruction("");
+    setUploadedFileNames([]);
+    setInvoiceDocument("");
   };
 
   return (
@@ -539,7 +565,10 @@ const BillPayment = () => {
               </div>
             </div>
             <div className="mt-[2em] flex flex-col gap-[2em] lg:flex-row">
-              <FileUploader onFileChange={handleFileChange} />
+              <FileUploader
+                onFileChange={handleFileChange}
+                setInvoiceDocument={setInvoiceDocument}
+              />
               <div className="w-full lg:w-1/2">
                 <label
                   htmlFor="instruction"
@@ -647,7 +676,6 @@ const BillPayment = () => {
                             <div className="flex items-center gap-2">
                               <img src={dot} alt="dot" />
                               <p className="text-xs text-gray-600">
-                                {/* {file.size} */}
                                 {formatFileSize(file.size)}
                               </p>
                             </div>
