@@ -59,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({
               onClick={onClose}
               className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
             >
-              <AiOutlineClose size={24} />
+              <AiOutlineClose size={30} />
             </button>
 
             <div>{children}</div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import upload from "../../../../assets/svg/upload.svg";
 import dot from "../../../../assets/svg/dot.svg";
 import document from "../../../../assets/svg/document-successfull.svg";
@@ -14,18 +14,33 @@ import { GetCurrencies } from "../../../../shared/redux/slices/transaction.slice
 import { setMessage } from "../../../../shared/redux/slices/message.slices";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
+import { Bill } from "../../../../shared/redux/slices/landing.slices";
 
 interface Country {
   name: string;
   code: string;
 }
 
-interface FileUploaderProps {
-  onFileChange: (files: File[]) => void;
+interface File {
+  name: string;
+  size: number;
 }
+
 interface Currency {
   name: string;
   code: string;
+}
+
+interface Billp {
+  status: number;
+  message: string;
+  data: {
+    redirectUrl: string;
+  };
+}
+
+interface FileUploaderProps {
+  onFileChange: (files: File[]) => void;
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
@@ -33,6 +48,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
   const [dragOver, setDragOver] = useState(false);
   const documentDoc = useRef<HTMLInputElement>(null);
   const [uploadImageToCloudinary] = useCloudinaryImageUpload();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -50,9 +66,16 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
     setFiles(uploadedFiles);
     if (uploadedFiles.length > 0) {
       try {
-        const imageUrl = await uploadImageToCloudinary(uploadedFiles[0]);
-        onFileChange(imageUrl);
-      } catch (error) {}
+        await uploadImageToCloudinary(uploadedFiles[0]);
+        onFileChange(
+          uploadedFiles.map((file) => ({
+            name: file.name,
+            size: file.size,
+          })),
+        );
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
 
@@ -61,9 +84,20 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
     setFiles(uploadedFiles);
     if (uploadedFiles.length > 0) {
       try {
-        const imageUrl = await uploadImageToCloudinary(uploadedFiles[0]);
-        onFileChange(imageUrl);
-      } catch (error) {}
+        setIsLoading(true);
+        await uploadImageToCloudinary(uploadedFiles[0]);
+        onFileChange(
+          uploadedFiles.map((file) => ({
+            name: file.name,
+            size: file.size,
+          })),
+        );
+      } catch (error) {
+        console.error("Error uploading file:", error);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false); // Set loading to false after upload completion or error
+      }
     }
   };
 
@@ -94,7 +128,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
         Invoice Document
       </label>
       <div
-        className={`mt-[1em] flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border p-5 ${
+        className={`mt-[1em] flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border py-9 ${
           dragOver ? "bg-purpleblack" : ""
         }`}
         onClick={handleClickDoc}
@@ -118,7 +152,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
           </p>
         </div>
         <div className="mt-5">
-          <button className="w-full font-br-regular">Browse file</button>
+          <button.PrimaryButton className="bg-primary">
+            Browse file
+          </button.PrimaryButton>
         </div>
       </div>
       <div className="filename mt-2 overflow-auto">
@@ -143,17 +179,27 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
             </div>
           ))}
       </div>
+      {isLoading && <ReactLoading type="spin" color="white" />}
     </div>
   );
 };
+
 const BillPayment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isCurrencyDropdown, setIsCurrencyDropdown] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [currency, setCurrency] = useState<Currency | null>(null);
   const [currencyLoading, setCurrencyLoading] = useState(true);
+  const [uploadedFileNames, setUploadedFileNames] = useState<File[]>([]);
+
+  const [description, setDescription] = useState("");
+  const [country, setCountry] = useState<Country | null>(null);
+  const [currency, setCurrency] = useState<Currency | null>(null);
   const [amount, setAmount] = useState("");
+  const [paymentInstruction, setPaymentInstruction] = useState("");
+  const [invoiceDocument, setInvoiceDocument] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+
+  const [redirectUrl, setRedirectUrl] = useState("");
 
   const dispatch =
     useDispatch<ThunkDispatch<unknown, unknown, UnknownAction>>();
@@ -173,7 +219,7 @@ const BillPayment = () => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        !(dropdownRef.current as Node).contains(event.target as Node)
       ) {
         setIsDropdownOpen(false);
       }
@@ -204,7 +250,7 @@ const BillPayment = () => {
   }, []);
 
   const handleCountrySelect = (country: Country) => {
-    setSelectedCountry(country);
+    setCountry(country);
     setIsDropdownOpen(false);
   };
 
@@ -262,6 +308,78 @@ const BillPayment = () => {
 
     setAmount(value);
   };
+  const handleFileChange = (files: File[]) => {
+    if (files.length > 0) {
+      setUploadedFileNames(files);
+      setInvoiceDocument(files[0].name);
+    } else {
+      setUploadedFileNames([]);
+      setInvoiceDocument("");
+    }
+  };
+
+  const BillPayment = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ): Promise<void> => {
+    event.preventDefault();
+    setLoading(true);
+    let body = {
+      description: description,
+      country: country?.name ?? "",
+      currency: currency?.code ?? "",
+      amount: parseFloat(amount.replace(/,/g, "")),
+      paymentInstruction,
+      invoiceDocument,
+    };
+
+    try {
+      const response = (await dispatch(Bill(body)).unwrap()) as Billp;
+
+      setRedirectUrl(response.data.redirectUrl);
+      console.log("Redirect URL:", response.data.redirectUrl);
+      openModal();
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || "Invalid credentials";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getCurrentDateTime = () => {
+    const date = new Date();
+    return new Intl.DateTimeFormat("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    }).format(date);
+  };
+
+  const isFormIncomplete =
+    !description ||
+    !country ||
+    !currency ||
+    !amount ||
+    !invoiceDocument ||
+    !paymentInstruction;
+
+  const formatFileSize = (size: number) => {
+    const i = Math.floor(Math.log(size) / Math.log(1024));
+    return `${(size / Math.pow(1024, i)).toFixed(2)} ${["B", "kB", "MB", "GB", "TB"][i]}`;
+  };
+
+  const clearFields = () => {
+    setDescription("");
+    setCountry(null);
+    setCurrency(null);
+    setAmount("");
+    setInvoiceDocument("");
+    setPaymentInstruction("");
+  };
 
   return (
     <div className="h-auto overflow-auto font-br-regular">
@@ -280,6 +398,8 @@ const BillPayment = () => {
                 </label>
                 <input
                   name="whatBill"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                   id="WhatBill"
                   className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3"
                 />
@@ -297,18 +417,18 @@ const BillPayment = () => {
                     className="w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3 text-left"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    {selectedCountry ? (
+                    {country ? (
                       <div className="flex items-center">
                         <Flag
-                          code={selectedCountry.code}
-                          key={selectedCountry.code}
+                          code={country.code}
+                          key={country.code}
                           style={{
                             width: "32px",
                             height: "32px",
                             marginRight: "8px",
                           }}
                         />
-                        {selectedCountry.name}
+                        {country.name}
                       </div>
                     ) : (
                       "Select a country"
@@ -322,8 +442,8 @@ const BillPayment = () => {
                       {countryList.map((country) => (
                         <div
                           key={country.code}
-                          className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                           onClick={() => handleCountrySelect(country)}
+                          className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                         >
                           <Flag
                             code={country.code}
@@ -395,7 +515,6 @@ const BillPayment = () => {
                   )}
                 </div>
               </div>
-
               <div className="w-full">
                 <label
                   htmlFor="amount"
@@ -420,7 +539,7 @@ const BillPayment = () => {
               </div>
             </div>
             <div className="mt-[2em] flex flex-col gap-[2em] lg:flex-row">
-              <FileUploader onFileChange={(files) => console.log(files)} />
+              <FileUploader onFileChange={handleFileChange} />
               <div className="w-full lg:w-1/2">
                 <label
                   htmlFor="instruction"
@@ -430,8 +549,10 @@ const BillPayment = () => {
                 </label>
                 <textarea
                   name="instruction"
+                  value={paymentInstruction}
+                  onChange={(e) => setPaymentInstruction(e.target.value)}
                   id="instruction"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit"
+                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
                   rows={9}
                 ></textarea>
               </div>
@@ -439,16 +560,25 @@ const BillPayment = () => {
           </form>
           <div className="flex justify-center">
             <button.PrimaryButton
-              className="mt-[1em] w-full lg:w-[80%]"
-              onClick={openModal}
+              className={`mt-[1em] w-full lg:w-[80%] ${isFormIncomplete ? "cursor-not-allowed bg-disabledPrimary text-gray-500" : "bg-primary text-white"}`}
+              onClick={BillPayment}
             >
-              Continue
+              {loading ? (
+                <ReactLoading
+                  color="#FFFFFF"
+                  width={25}
+                  height={25}
+                  type="spin"
+                />
+              ) : (
+                "Continue"
+              )}
             </button.PrimaryButton>
           </div>
         </div>
       </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className="mt-[1.5em] flex flex-col items-center justify-center">
+        <div className="mt-[1.5em]  flex flex-col items-center justify-center text-text">
           <h1 className="mb-4 font-br-semibold text-2xl text-text lg:text-3xl">
             Confirm Transaction
           </h1>
@@ -465,10 +595,13 @@ const BillPayment = () => {
                 Payment for
               </label>
               <input
+                value={description}
+                readOnly
                 name="amount"
                 id="amount"
                 type="text"
-                className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
+                disabled
+                className="mt-[1em] w-full flex-1 rounded-lg border-[2px] border-side bg-inherit bg-input p-3 text-xl font-semibold text-textp"
               />
             </div>
 
@@ -479,14 +612,55 @@ const BillPayment = () => {
               >
                 Amount to receive
               </label>
-              <input
-                name="amount"
-                id="amount"
-                type="text"
-                className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
-              />
+              <div className="w-ful text-textl relative mt-[1em]  flex items-center">
+                <span className="absolute inset-y-0 left-0 flex items-center pl-3 font-semibold text-gray-500">
+                  {currency?.code}
+                </span>
+                <input
+                  name="amount"
+                  id="amount"
+                  readOnly
+                  type="text"
+                  value={amount}
+                  className="flex-1 rounded-lg border-[2px] border-side bg-inherit  bg-input  p-3 pl-10 font-br-semibold focus:border-side focus:bg-inherit focus:outline-none"
+                  style={{ textAlign: "right" }}
+                />
+              </div>
             </div>
-            <div className="mt-[1.5em] flex gap-1">
+
+            <div className="flex gap-1">
+              {uploadedFileNames.length > 0 && (
+                <div>
+                  <ul className="mt-2 list-inside list-disc">
+                    {uploadedFileNames.map((file, index) => (
+                      <div
+                        key={index}
+                        className="mt-2 flex items-start gap-3 p-2"
+                      >
+                        <img src={document} alt="document" />
+                        <div>
+                          <p className="font-semibold">{file.name}</p>
+                          <div className="flex items-center gap-3">
+                            <p className="text-xs text-gray-600">
+                              {getCurrentDateTime()}
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <img src={dot} alt="dot" />
+                              <p className="text-xs text-gray-600">
+                                {/* {file.size} */}
+                                {formatFileSize(file.size)}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-[1em] flex gap-1">
               <img src={exclamation} alt="information" />
               <p className="text-sm text-text">
                 Please note that you will be charged an exchange fee after
@@ -494,17 +668,13 @@ const BillPayment = () => {
               </p>
             </div>
           </div>
-          <button.PrimaryButton
-            onClick={closeModal}
-            className="mt-[1.5em] w-full text-text lg:mt-[4em] lg:w-[75%]"
-          >
-            Make Payment
-          </button.PrimaryButton>
-          <div className="mt-[1.3em]">
-            <p className="gradient-text font-br-semibold">
-              Get A Discounted offer
-            </p>
-          </div>
+          <a href={redirectUrl} target="blank">
+            <button onClick={clearFields}>
+              <div className="mt-[1.5em] w-[35em] rounded-md bg-primary px-4 py-3 text-center font-br-semibold text-text lg:mt-[4em] ">
+                Make Payment
+              </div>
+            </button>
+          </a>
         </div>
       </Modal>
     </div>

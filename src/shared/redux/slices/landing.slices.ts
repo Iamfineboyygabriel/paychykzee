@@ -105,12 +105,28 @@ export const PeerToPeer = createAsyncThunk(
   },
 );
 
+export const Bill = createAsyncThunk(
+  "landing/bill",
+  async (body: any, thunkAPI) => {
+    try {
+      const data = await LandingServices.Bill(body);
+      return data;
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
 export const initialState = {
   getUserRegistered: null,
   verifyAuthData: null,
   getloginUser: null,
   paymentRate: null,
   pair: null,
+  bill: null,
 };
 
 export const userSlice = createSlice({
@@ -147,6 +163,12 @@ export const userSlice = createSlice({
     });
     builder.addCase(PeerToPeer.rejected, (state) => {
       state.pair = null;
+    });
+    builder.addCase(Bill.fulfilled, (state, action) => {
+      state.bill = action.payload as null;
+    });
+    builder.addCase(Bill.rejected, (state) => {
+      state.bill = null;
     });
   },
 });

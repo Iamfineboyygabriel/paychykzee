@@ -7,6 +7,7 @@ const API_URL_VERIFY_USER = process.env.REACT_APP_API_URL + "/auth/verifyToken";
 const API_URL_LOGIN_USER = process.env.REACT_APP_API_URL + "/auth/login";
 const API_URL_PAYMENT_RATE = process.env.REACT_APP_API_URL + "/payment/rate";
 const API_URL_PEER_TO_PEER = process.env.REACT_APP_API_URL + "/payment/p2p";
+const API_URL_BILL = process.env.REACT_APP_API_URL + "/payment/bills";
 
 export interface RegisterUserRequestBody {
   firstName: string;
@@ -45,6 +46,7 @@ export interface LandingServices {
     exchangeFee: number;
     rate: number;
   }) => Promise<unknown>;
+  Bill: (body: any) => Promise<unknown>;
   Reach_Out: (endpoint: string, body: { message: string }) => Promise<unknown>;
 }
 
@@ -131,6 +133,19 @@ const landingServices: LandingServices = {
     } catch (error: unknown) {
       throw new Error(
         `Error peering: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  },
+
+  Bill: async (body) => {
+    try {
+      const response = await axios.post(API_URL_BILL, body, {
+        headers: authHeader(),
+      });
+      return response.data;
+    } catch (error: unknown) {
+      throw new Error(
+        `Error Paying Bill: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   },
