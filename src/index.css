@@ -87,3 +87,16 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 5px;
   background-color: inherit;
 }
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 1px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #4c1ef5, #b81ef5) !important;
+  border-radius: 40px !important;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}

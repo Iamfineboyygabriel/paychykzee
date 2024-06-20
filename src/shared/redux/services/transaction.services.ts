@@ -12,8 +12,21 @@ const GetCurrencies = async () => {
   });
 };
 
+const GetUserProfile = async (userId: any) => {
+  try {
+    const url = `${process.env.REACT_APP_API_URL}/users/${userId}`;
+    const response = await axios.get(url, { headers: authHeader() });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      `Error fetching user profile: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+};
+
 const TransactionServices = {
   GetCurrencies,
+  GetUserProfile,
 };
 
 export default TransactionServices;

@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import profile from "../../../../../assets/png/profile.png";
+import { useDispatch, useSelector } from "react-redux";
+import { GetUserProfile } from "../../../../../shared/redux/slices/transaction.slices";
+import { setMessage } from "../../../../../shared/redux/slices/message.slices";
 
 const Personal = () => {
+  const dispatch = useDispatch();
+  const userId = useSelector((state: any) => state.transaction);
+  console.log("id", userId);
+
+  const userData = useSelector((state: any) => state.transaction.userProfile);
+  console.log("userdata:", userData);
+  const [fetching, setFetching] = useState(false);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      setFetching(true);
+      try {
+        const data = GetUserProfile(userId);
+        console.log("User Profile:", data);
+      } catch (error: any) {
+        dispatch(setMessage(error.message));
+      } finally {
+        setFetching(false);
+      }
+    };
+    fetchUserProfile();
+  }, [dispatch, userId]);
+
   return (
     <div>
       <header>

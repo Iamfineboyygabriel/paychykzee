@@ -7,6 +7,13 @@ import exclamation from "../../../../assets/svg/exclamation.svg";
 import Modal from "../../../../shared/modal/Modal";
 import { countries as countryData } from "country-data";
 import Flag from "react-world-flags";
+import useCloudinaryImageUpload from "../../../../shared/redux/hooks/useCloudinaryImageUpload";
+import { ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
+import { useDispatch, useSelector } from "react-redux";
+import { GetCurrencies } from "../../../../shared/redux/slices/transaction.slices";
+import { setMessage } from "../../../../shared/redux/slices/message.slices";
+import { toast } from "react-toastify";
+import ReactLoading from "react-loading";
 
 interface Country {
   name: string;
@@ -16,11 +23,16 @@ interface Country {
 interface FileUploaderProps {
   onFileChange: (files: File[]) => void;
 }
+interface Currency {
+  name: string;
+  code: string;
+}
 
 const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const documentDoc = useRef<HTMLInputElement>(null);
+  const [uploadImageToCloudinary] = useCloudinaryImageUpload();
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -31,33 +43,29 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
     setDragOver(false);
   };
 
-  // const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.preventDefault();
-  //   setDragOver(false);
-  //   const uploadedFiles = Array.from(e.dataTransfer.files);
-  //   setFiles((prevFiles) => [...prevFiles, ...uploadedFiles]);
-  //   onFileChange([...files, ...uploadedFiles]);
-  // };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
     const uploadedFiles = Array.from(e.dataTransfer.files);
     setFiles(uploadedFiles);
-    onFileChange(uploadedFiles);
+    if (uploadedFiles.length > 0) {
+      try {
+        const imageUrl = await uploadImageToCloudinary(uploadedFiles[0]);
+        onFileChange(imageUrl);
+      } catch (error) {}
+    }
   };
 
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const uploadedFiles = Array.from(e.target.files || []);
-  //   setFiles(uploadedFiles);
-  //   onFileChange(uploadedFiles);
-  // };
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFiles = Array.from(e.target.files || []);
     setFiles(uploadedFiles);
-    onFileChange(uploadedFiles);
+    if (uploadedFiles.length > 0) {
+      try {
+        const imageUrl = await uploadImageToCloudinary(uploadedFiles[0]);
+        onFileChange(imageUrl);
+      } catch (error) {}
+    }
   };
-
 
   const handleClickDoc = () => {
     documentDoc.current?.click();
@@ -110,9 +118,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
           </p>
         </div>
         <div className="mt-5">
-          <button.PrimaryButton className="w-full font-br-regular">
-            Browse file
-          </button.PrimaryButton>
+          <button className="w-full font-br-regular">Browse file</button>
         </div>
       </div>
       <div className="filename mt-2 overflow-auto">
@@ -140,24 +146,28 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileChange }) => {
     </div>
   );
 };
-
 const BillPayment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isCurrencyDropdown, setIsCurrencyDropdown] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [currency, setCurrency] = useState<Currency | null>(null);
+  const [currencyLoading, setCurrencyLoading] = useState(true);
+  const [amount, setAmount] = useState("");
 
+  const dispatch =
+    useDispatch<ThunkDispatch<unknown, unknown, UnknownAction>>();
+  const userToken = sessionStorage.getItem("userData");
+
+  const currencyList = useSelector(
+    (state: any) => state.transaction.getCurrencies,
+  );
   const countryList: Country[] = countryData.all.map((country: any) => ({
     name: country.name,
     code: country.alpha2,
   }));
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const handleCountrySelect = (country: Country) => {
-    setSelectedCountry(country);
-    setIsDropdownOpen(false);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -176,12 +186,81 @@ const BillPayment = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !(dropdownRef.current as Node).contains(event.target as Node)
+      ) {
+        setIsCurrencyDropdown(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleCountrySelect = (country: Country) => {
+    setSelectedCountry(country);
+    setIsDropdownOpen(false);
+  };
+
+  const handleBaseCurrencySelect = (currency: Currency) => {
+    setCurrency(currency);
+    setIsCurrencyDropdown(false);
+  };
+
   const openModal = async () => {
     setIsModalOpen(true);
   };
 
   const closeModal = async () => {
     setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (userToken) {
+      setCurrencyLoading(true);
+      dispatch(GetCurrencies())
+        .unwrap()
+        .then(() => {
+          setCurrencyLoading(false);
+        })
+        .catch((error: { message: any }) => {
+          setCurrencyLoading(false);
+          const errorMessage = error.message;
+          dispatch(setMessage(errorMessage));
+          toast.error(errorMessage);
+        });
+    } else {
+      dispatch(setMessage("Token not found"));
+      toast.error("Token not found");
+    }
+  }, [dispatch, userToken]);
+
+  const handleBaseAmountChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    let value = event.target.value;
+
+    value = value.replace(/[^\d.,]/g, "");
+
+    value = value.replace(/^0+/, "");
+
+    value = value.replace(/,/g, "");
+
+    const [wholePart, fractionalPart] = value.split(/[.,]/);
+
+    const formattedWholePart = wholePart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    value = fractionalPart
+      ? `${formattedWholePart}.${fractionalPart}`
+      : formattedWholePart;
+
+    setAmount(value);
   };
 
   return (
@@ -269,7 +348,7 @@ const BillPayment = () => {
               </h1>
             </div>
 
-            <div className="xs:flex-col relative mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
+            <div className="xs:flex-col mt-[2em] flex flex-col gap-[2em] sm:flex-col md:flex-row lg:flex-row">
               <div className="w-full">
                 <label
                   htmlFor="currency"
@@ -277,12 +356,46 @@ const BillPayment = () => {
                 >
                   Currency
                 </label>
-                <input
-                  name="currency"
-                  id="currency"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
-                />
+                <div className="relative mt-[1em]">
+                  <button
+                    className="w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3 text-left text-textp"
+                    onClick={() => setIsCurrencyDropdown(!isCurrencyDropdown)}
+                    disabled={currencyLoading}
+                    type="button"
+                  >
+                    {currencyLoading ? (
+                      <div className="flex items-center justify-start">
+                        <ReactLoading
+                          type="spin"
+                          color="#FFFFFF"
+                          height={20}
+                          width={20}
+                        />
+                        <span className="ml-2">Loading...</span>
+                      </div>
+                    ) : (
+                      currency?.name || "Select base currency"
+                    )}
+                  </button>
+                  {isCurrencyDropdown && (
+                    <div
+                      ref={dropdownRef}
+                      className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input"
+                    >
+                      {currencyList.data.map((currency: any) => (
+                        <div
+                          key={currency.code}
+                          className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
+                          onClick={() => handleBaseCurrencySelect(currency)}
+                        >
+                          {currency.name}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
+
               <div className="w-full">
                 <label
                   htmlFor="amount"
@@ -290,15 +403,22 @@ const BillPayment = () => {
                 >
                   Amount
                 </label>
-                <input
-                  name="amount"
-                  id="amount"
-                  type="text"
-                  className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3"
-                />
+                <div className="relative mt-[1em] flex w-full items-center">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 font-semibold text-gray-500">
+                    {currency?.code}
+                  </span>
+                  <input
+                    name="amount"
+                    id="amount"
+                    type="text"
+                    value={amount}
+                    onChange={handleBaseAmountChange}
+                    className="flex-1 rounded-lg border-[2px] border-border bg-inherit bg-input p-3 pl-10 focus:border-border focus:bg-inherit focus:outline-none"
+                    style={{ textAlign: "right" }}
+                  />
+                </div>
               </div>
             </div>
-
             <div className="mt-[2em] flex flex-col gap-[2em] lg:flex-row">
               <FileUploader onFileChange={(files) => console.log(files)} />
               <div className="w-full lg:w-1/2">

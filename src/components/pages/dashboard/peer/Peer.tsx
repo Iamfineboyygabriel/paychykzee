@@ -113,6 +113,7 @@ const Peer = () => {
     if (baseCurrency && pairCurrency && baseAmount.trim() !== "") {
       setLoading(true);
       await pairToAmount();
+      await pairToAmountDiscounted();
       setIsModalOpen(true);
       setLoading(false);
     } else {
@@ -192,6 +193,32 @@ const Peer = () => {
       pairCurrency: pairCurrency?.code ?? "",
       pairAmount: parseFloat(pairAmount),
       exchangeFee: parseFloat(exchangeFee),
+      rate: parseFloat(rate),
+    };
+
+    try {
+      const response = (await dispatch(
+        PeerToPeer(body),
+      ).unwrap()) as PeerToPeerResponse;
+
+      setRedirectUrl(response.data.redirectUrl);
+      console.log("Redirect URL:", response.data.redirectUrl);
+      return true;
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message || "Invalid credentials";
+      toast.error(errorMessage);
+      return false;
+    }
+  };
+
+  const pairToAmountDiscounted = async (): Promise<boolean> => {
+    let body = {
+      baseCurrency: baseCurrency?.code ?? "",
+      baseAmount: parseFloat(baseAmount.replace(/,/g, "")),
+      pairCurrency: pairCurrency?.code ?? "",
+      pairAmount: parseFloat(baseAmount.replace(/,/g, "")) * parseFloat(rate),
+      exchangeFee: 0,
       rate: parseFloat(rate),
     };
 
@@ -389,7 +416,7 @@ const Peer = () => {
                   {baseCurrency?.code} / {pairCurrency?.code}
                 </p>
 
-                <div className="mt-[2em]">
+                <div>
                   <div className="flex items-center gap-3">
                     <p>Rate:</p>
                     {rateLoading ? (
@@ -511,7 +538,9 @@ const Peer = () => {
                 </a>
                 <section className="mt-[1.3em]">
                   <p className="gradient-text font-br-semibold">
-                    Get A Discounted offer
+                    <a href={redirectUrl} target="blank">
+                      Get A Discounted offer
+                    </a>
                   </p>
                 </section>
               </div>
