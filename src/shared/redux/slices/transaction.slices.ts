@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { setMessage } from "./message.slices";
 import TransactionServices from "../services/transaction.services";
-import authHeader from "../services/headers";
-import axios from "axios";
 
 interface TransactionState {
   getCurrencies: {
@@ -10,13 +8,24 @@ interface TransactionState {
   };
   userProfile: any;
   error: string | null;
+  updateProfile: null;
 }
 
 const initialState: TransactionState = {
   getCurrencies: { transaction: null },
   userProfile: null,
   error: null,
+  updateProfile: null,
 };
+
+interface UpdateProfileParams {
+  userID: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  country?: string;
+  phoneNumber?: string;
+}
 
 export const GetCurrencies = createAsyncThunk(
   "transaction/getCurrencies",
@@ -35,23 +44,55 @@ export const GetCurrencies = createAsyncThunk(
     }
   },
 );
-
 export const GetUserProfile = createAsyncThunk(
   "transaction/getProfile",
-  async (userId: string, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
     try {
-      console.log("url");
-      const url = `${process.env.REACT_APP_API_URL}/users/${userId}`;
-      const response = await axios.get(url, { headers: authHeader() });
-      return response.data;
+      const data = await TransactionServices.GetUserProfile();
+      return data;
     } catch (error: any) {
-      const errorMessage =
+      const message =
         (error.response &&
           error.response.data &&
           error.response.data.message) ||
         error.message ||
         error.toString();
-      return rejectWithValue(errorMessage);
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
+
+// export const UpdateProfile = createAsyncThunk(
+//   "transaction/updateProfile",
+//   async (_, thunkAPI) => {
+//     try {
+//       const data = await TransactionServices.GetUserProfile();
+//       return data;
+//     } catch (error: any) {
+//       const message =
+//         (error.response &&
+//           error.response.data &&
+//           error.response.data.message) ||
+//         error.message ||
+//         error.toString();
+//       return thunkAPI.rejectWithValue(message);
+//     }
+//   },
+// );
+export const UpdateProfile = createAsyncThunk(
+  "transaction/updateProfile",
+  async (params: UpdateProfileParams, thunkAPI) => {
+    try {
+      const data = await TransactionServices.UpdateProfile(params);
+      return data;
+    } catch (error: any) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   },
 );
@@ -81,6 +122,18 @@ export const transactionSlice = createSlice({
     );
     builder.addCase(GetUserProfile.rejected, (state, action) => {
       state.userProfile = null;
+      const errorMessage =
+        action.error.message || "Failed to fetch user profile.";
+      setMessage(errorMessage);
+    });
+    builder.addCase(
+      UpdateProfile.fulfilled,
+      (state, action: PayloadAction<any>) => {
+        state.updateProfile = action.payload;
+      },
+    );
+    builder.addCase(UpdateProfile.rejected, (state, action) => {
+      state.updateProfile = null;
       const errorMessage =
         action.error.message || "Failed to fetch user profile.";
       setMessage(errorMessage);

@@ -4,9 +4,11 @@ import logo from "../../../assets/png/PayChykzee.png";
 import SideModal from "../sidemodal/SideModal";
 import { AiOutlineMenu } from "react-icons/ai";
 import { button } from "../../../shared/button/button";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const userData = useSelector((state: any) => state.transaction.userProfile);
 
   const toggle = () => {
     setIsModalOpen(!isModalOpen);
@@ -41,12 +43,16 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-dashboard p-6 text-white">
+    <header className="bg-dashboard p-6 font-br-regular text-white">
       <div className="flex justify-between lg:px-[1em]">
         <div>
           <img src={logo} alt="paychykzee-logo" />
         </div>
-        <div className="hidden lg:block">profile</div>
+        <div className="hidden gap-2 lg:flex">
+          <h1 className="font-sm text-textp">Welcome</h1>
+          <div className="gradient-text">{userData?.firstName}</div>
+          <div className="gradient-text">{userData?.lastName}</div>
+        </div>
         <AiOutlineMenu
           onClick={toggle}
           size={30}

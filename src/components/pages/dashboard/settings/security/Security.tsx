@@ -75,18 +75,18 @@ const Security: React.FC<SecurityProps> = () => {
       newPassword,
       oldPassword,
     };
-    try {
-      const response = await dispatch(Update_Password(body)).unwrap();
-      console.log("Response:", response);
+    const response: any = await dispatch(Update_Password(body)).unwrap();
+    if (response.status !== 200) {
       setLoading(false);
-      openModal();
-      setOldPassword("");
-      setNewPassword("");
-      setConfirmPasswordValue("");
-    } catch (error: any) {
+      toast.error(response?.message);
       setLoading(false);
-      toast.error(error);
+      return;
     }
+    console.log("Response:", response);
+    openModal();
+    setOldPassword("");
+    setNewPassword("");
+    setConfirmPasswordValue("");
   };
 
   useEffect(() => {
@@ -118,7 +118,7 @@ const Security: React.FC<SecurityProps> = () => {
                   type={oldPasswordType}
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
-                  className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
+                  className="mt-[1em] flex w-full rounded-lg border-[2px] border-border  bg-inherit p-3 focus:border-focus:outline-none "
                 />
                 <button
                   type="button"
