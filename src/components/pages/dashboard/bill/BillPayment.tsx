@@ -1,10 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import upload from "../../../../assets/svg/upload.svg";
-import dot from "../../../../assets/svg/dot.svg";
-import document from "../../../../assets/svg/document-successfull.svg";
-import { button } from "../../../../shared/button/button";
-import exclamation from "../../../../assets/svg/exclamation.svg";
-import Modal from "../../../../shared/modal/Modal";
 import { countries as countryData } from "country-data";
 import Flag from "react-world-flags";
 import useCloudinaryImageUpload from "../../../../shared/redux/hooks/useCloudinaryImageUpload";
@@ -12,9 +6,15 @@ import { ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCurrencies } from "../../../../shared/redux/slices/transaction.slices";
 import { setMessage } from "../../../../shared/redux/slices/message.slices";
-import { toast } from "react-toastify";
-import ReactLoading from "react-loading";
 import { Bill } from "../../../../shared/redux/slices/landing.slices";
+import { button } from "../../../../shared/button/button";
+import Modal from "../../../../shared/modal/Modal";
+import dot from "../../../../assets/svg/dot.svg";
+import exclamation from "../../../../assets/svg/exclamation.svg";
+import document from "../../../../assets/svg/document-successfull.svg";
+import upload from "../../../../assets/svg/upload.svg";
+import ReactLoading from "react-loading";
+import { toast } from "react-toastify";
 
 interface Country {
   name: string;
@@ -48,11 +48,13 @@ interface UploadedFile {
 interface FileUploaderProps {
   onFileChange: (files: File[]) => void;
   setInvoiceDocument: (url: string) => void;
+  reset: boolean;
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({
   onFileChange,
   setInvoiceDocument,
+  reset,
 }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [dragOver, setDragOver] = useState(false);
@@ -79,16 +81,14 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         const cloudinaryResponse = await uploadImageToCloudinary(
           uploadedFiles[0],
         );
-        console.log("Cloudinary response:", cloudinaryResponse); 
         onFileChange(
           uploadedFiles.map((file) => ({
             name: file.name,
             size: file.size,
-            secure_url: cloudinaryResponse, 
+            secure_url: cloudinaryResponse,
           })),
         );
       } catch (error) {
-        console.error("Error uploading file:", error);
       } finally {
         setIsLoading(false);
       }
@@ -141,6 +141,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       ["B", "kB", "MB", "GB", "TB"][i]
     }`;
   };
+
+  useEffect(() => {
+    if (reset && documentDoc.current) {
+      documentDoc.current.value = "";
+      setFiles([]);
+    }
+  }, [reset]);
 
   return (
     <div className="w-full lg:w-1/2">
@@ -199,7 +206,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({
             </div>
           ))}
       </div>
-      {isLoading && <ReactLoading type="spin" color="white" />}
+      {isLoading && (
+        <ReactLoading type="spin" height={20} width={20} color="white" />
+      )}
     </div>
   );
 };
@@ -221,8 +230,9 @@ const BillPayment = () => {
   const [invoiceDocument, setInvoiceDocument] = useState("");
 
   const [loading, setLoading] = useState(false);
-
   const [redirectUrl, setRedirectUrl] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [resetFileInput, setResetFileInput] = useState<boolean>(false);
 
   const dispatch =
     useDispatch<ThunkDispatch<unknown, unknown, UnknownAction>>();
@@ -235,8 +245,6 @@ const BillPayment = () => {
     name: country.name,
     code: country.alpha2,
   }));
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -361,7 +369,6 @@ const BillPayment = () => {
       const response = (await dispatch(Bill(body)).unwrap()) as Billp;
 
       setRedirectUrl(response.data.redirectUrl);
-      console.log("Redirect URL:", response.data.redirectUrl);
       openModal();
     } catch (error: any) {
       const errorMessage =
@@ -405,6 +412,14 @@ const BillPayment = () => {
     setPaymentInstruction("");
     setUploadedFileNames([]);
     setInvoiceDocument("");
+    clearFileInput();
+  };
+
+  const clearFileInput = () => {
+    setUploadedFileNames([]);
+    setInvoiceDocument("");
+    setResetFileInput(true);
+    setTimeout(() => setResetFileInput(false), 0);
   };
 
   return (
@@ -567,6 +582,7 @@ const BillPayment = () => {
             <div className="mt-[2em] flex flex-col gap-[2em] lg:flex-row">
               <FileUploader
                 onFileChange={handleFileChange}
+                reset={resetFileInput}
                 setInvoiceDocument={setInvoiceDocument}
               />
               <div className="w-full lg:w-1/2">
@@ -696,13 +712,16 @@ const BillPayment = () => {
               </p>
             </div>
           </div>
-          <a href={redirectUrl} target="blank">
-            <button onClick={clearFields}>
-              <div className="mt-[1.5em] w-[35em] rounded-md bg-primary px-4 py-3 text-center font-br-semibold text-text lg:mt-[4em] ">
-                Make Payment
-              </div>
-            </button>
-          </a>
+          <button
+            onClick={() => {
+              clearFields();
+              window.open(redirectUrl, "_blank");
+            }}
+          >
+            <div className="mt-[1.5em] w-[35em] rounded-md bg-primary px-4 py-3 text-center font-br-semibold text-text lg:mt-[4em] ">
+              Make Payment
+            </div>
+          </button>
         </div>
       </Modal>
     </div>

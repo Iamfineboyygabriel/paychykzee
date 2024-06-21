@@ -142,7 +142,6 @@ const Peer = () => {
         setRate(rate.toString());
         setExchangeFee("5");
       } catch (error: any) {
-        console.log(error);
         const errorMessage =
           error.response?.data?.message || "Invalid credentials";
         toast.error(errorMessage);
@@ -202,7 +201,6 @@ const Peer = () => {
       ).unwrap()) as PeerToPeerResponse;
 
       setRedirectUrl(response.data.redirectUrl);
-      console.log("Redirect URL:", response.data.redirectUrl);
       return true;
     } catch (error: any) {
       const errorMessage =
@@ -228,7 +226,6 @@ const Peer = () => {
       ).unwrap()) as PeerToPeerResponse;
 
       setRedirectUrl(response.data.redirectUrl);
-      console.log("Redirect URL:", response.data.redirectUrl);
       return true;
     } catch (error: any) {
       const errorMessage =
