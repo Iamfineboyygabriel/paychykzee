@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import image from "../../../../assets/png/hands-money.png";
-import { button } from "../../../../shared/button/button";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../shared/redux/store";
+import { LoginUser } from "../../../../shared/redux/slices/landing.slices";
 import { MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { LoginUser } from "../../../../shared/redux/slices/landing.slices";
-import { AppDispatch } from "../../../../shared/redux/store";
-import { toast } from "react-toastify";
+import image from "../../../../assets/png/hands-money.png";
 import ReactLoading from "react-loading";
+import { toast } from "react-toastify";
+import { button } from "../../../../shared/button/button";
 
 interface UserLoginProps {
   emailInputProps?: {
@@ -69,7 +69,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
       console.log("Response:", response);
       setLoading(false);
       navigate("/dashboard/home");
-      toast.success("Login successful");
+      toast.success("Wellcome");
     } catch (error: any) {
       setLoading(false);
       const errorMessage =

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 import mail from "../../../assets/svg/mail.svg";
 import mobile from "../../../assets/svg/mobile.svg";
 import location from "../../../assets/svg/location.png";
 import facebook from "../../../assets/svg/facebook.svg";
 import tweeter from "../../../assets/svg/tweeter.svg";
 import lnkdln from "../../../assets/svg/lnkdn.svg";
-import { Link as ScrollLink } from "react-scroll";
 
 export const Footer = () => {
   return (
@@ -58,7 +58,7 @@ export const Footer = () => {
           <div>
             <p className="font-br-light">PayChykzee All Rights Reserved</p>
           </div>
-          <div className="">
+          <div>
             <p className="font-br-light">Privacy Policy | Terms of service</p>
           </div>
         </div>

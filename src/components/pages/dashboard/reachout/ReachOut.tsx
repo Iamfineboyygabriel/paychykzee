@@ -44,7 +44,6 @@ const ReachOut = () => {
         toast.error("An error occurred");
       }
     } catch (error: any) {
-      console.log("error contacting", error);
       setLoading(false);
       toast.error(error.message);
     }

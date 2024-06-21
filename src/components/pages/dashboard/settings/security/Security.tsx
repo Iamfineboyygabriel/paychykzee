@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../../shared/redux/store";
+import { toast } from "react-toastify";
+import { Update_Password } from "../../../../../shared/redux/slices/landing.slices";
+import ReactLoading from "react-loading";
 import { button } from "../../../../../shared/button/button";
+import Modal from "../../../../../shared/modal/Modal";
+import image from "../../../../../assets/svg/success.svg";
 
 interface SecurityProps {
   emailInputProps?: {
@@ -17,12 +24,23 @@ interface SecurityProps {
 }
 
 const Security: React.FC<SecurityProps> = () => {
-  const [passwordValue, setPasswordValue] = useState("");
-  const [passwordType, setPasswordType] = useState("password");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordType, setNewPasswordType] = useState("password");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
-  const [oldPasswordValue, setOldPasswordValue] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [oldPasswordType, setOldPasswordType] = useState("password");
+  const [loading, setLoading] = useState(false);
+  const [passwordsMatch, setPasswordsMatch] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const toggleOldPasswordVisibility = () => {
     setOldPasswordType((prevType) =>
@@ -31,7 +49,7 @@ const Security: React.FC<SecurityProps> = () => {
   };
 
   const togglePasswordVisibility = () => {
-    setPasswordType((prevType) =>
+    setNewPasswordType((prevType) =>
       prevType === "password" ? "text" : "password",
     );
   };
@@ -42,21 +60,38 @@ const Security: React.FC<SecurityProps> = () => {
     );
   };
 
-  const handleOldPasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setOldPasswordValue(event.target.value);
+  const dispatch: AppDispatch = useDispatch();
+
+  const UpdatePassword = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!passwordsMatch) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+    let body = {
+      newPassword,
+      oldPassword,
+    };
+    try {
+      const response = await dispatch(Update_Password(body)).unwrap();
+      console.log("Response:", response);
+      setLoading(false);
+      openModal();
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPasswordValue("");
+    } catch (error: any) {
+      setLoading(false);
+      toast.error(error);
+    }
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordValue(event.target.value);
-  };
-
-  const handleConfirmPasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setConfirmPasswordValue(event.target.value);
-  };
+  useEffect(() => {
+    setPasswordsMatch(newPassword === confirmPasswordValue);
+  }, [newPassword, confirmPasswordValue]);
 
   return (
     <main className="font-br-regular lg:px-[3em]">
@@ -64,22 +99,25 @@ const Security: React.FC<SecurityProps> = () => {
         <header>
           <h1 className="font-br-semibold text-xl">Change Password</h1>
         </header>
-        <form action="login" className="mt-[1.5em] w-full text-logintext">
+        <form
+          onSubmit={UpdatePassword}
+          className="mt-[1.5em] w-full text-logintext"
+        >
           <div className="m-auto mt-[1em] flex flex-col gap-3 lg:w-[50%] ">
             <div className="w-full">
               <label
-                htmlFor="password"
+                htmlFor="oldPassword"
                 className="flex-start flex font-br-semibold"
               >
                 Old Password
               </label>
               <div className="relative flex items-center text-center">
                 <input
-                  name="password"
-                  id="password"
+                  name="oldPassword"
+                  id="oldPassword"
                   type={oldPasswordType}
-                  value={oldPasswordValue}
-                  onChange={handleOldPasswordChange}
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
                   className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
                 />
                 <button
@@ -87,7 +125,7 @@ const Security: React.FC<SecurityProps> = () => {
                   onClick={toggleOldPasswordVisibility}
                   className="absolute right-4 mt-[1em] self-center"
                 >
-                  {passwordType === "password" ? (
+                  {oldPasswordType === "password" ? (
                     <MdOutlineVisibilityOff />
                   ) : (
                     <MdOutlineVisibility />
@@ -98,18 +136,18 @@ const Security: React.FC<SecurityProps> = () => {
 
             <div className="w-full">
               <label
-                htmlFor="password"
+                htmlFor="newPassword"
                 className="flex-start flex font-br-semibold"
               >
-                Password
+                New Password
               </label>
               <div className="relative flex items-center text-center">
                 <input
-                  name="password"
-                  id="password"
-                  type={passwordType}
-                  value={passwordValue}
-                  onChange={handlePasswordChange}
+                  name="newPassword"
+                  id="newPassword"
+                  type={newPasswordType}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
                 />
                 <button
@@ -117,7 +155,7 @@ const Security: React.FC<SecurityProps> = () => {
                   onClick={togglePasswordVisibility}
                   className="absolute right-4 mt-[1em] self-center"
                 >
-                  {passwordType === "password" ? (
+                  {newPasswordType === "password" ? (
                     <MdOutlineVisibilityOff />
                   ) : (
                     <MdOutlineVisibility />
@@ -131,7 +169,7 @@ const Security: React.FC<SecurityProps> = () => {
                 htmlFor="confirmPassword"
                 className="flex-start flex font-br-semibold"
               >
-                Confirm Password
+                Confirm New Password
               </label>
               <div className="relative flex items-center text-center">
                 <input
@@ -139,7 +177,7 @@ const Security: React.FC<SecurityProps> = () => {
                   id="confirmPassword"
                   type={confirmPasswordType}
                   value={confirmPasswordValue}
-                  onChange={handleConfirmPasswordChange}
+                  onChange={(e) => setConfirmPasswordValue(e.target.value)}
                   className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
                 />
                 <button
@@ -155,13 +193,37 @@ const Security: React.FC<SecurityProps> = () => {
                 </button>
               </div>
             </div>
-            <p className="text-side">Forgot Password ?</p>
           </div>
-          <button.PrimaryButton className="mt-[1.5em] w-full text-text">
-            Change Password
+
+          <button.PrimaryButton
+            className="mt-[1.5em] w-full text-text"
+            type="submit"
+            disabled={!passwordsMatch || loading}
+          >
+            {loading ? (
+              <ReactLoading
+                color="#FFFFFF"
+                width={25}
+                height={25}
+                type="spin"
+              />
+            ) : (
+              "Change Password"
+            )}
           </button.PrimaryButton>
         </form>
       </div>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className="flex flex-col items-center justify-center lg:p-[4em]">
+          <img src={image} alt="Success" className="mb-4 h-24 w-24" />
+          <h1 className="mb-4 space-x-12 font-br-semibold text-3xl text-text">
+            Password updated successfully
+          </h1>
+          <p className="mb-4 text-center text-textp">
+            You successfully updated your password
+          </p>
+        </div>
+      </Modal>
     </main>
   );
 };

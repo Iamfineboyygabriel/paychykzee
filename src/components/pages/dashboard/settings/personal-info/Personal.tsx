@@ -1,37 +1,37 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 import profile from "../../../../../assets/png/profile.png";
-import { useDispatch, useSelector } from "react-redux";
-import { GetUserProfile } from "../../../../../shared/redux/slices/transaction.slices";
-import { setMessage } from "../../../../../shared/redux/slices/message.slices";
+// import { useDispatch, useSelector } from "react-redux";
+// import { GetUserProfile } from "../../../../../shared/redux/slices/transaction.slices";
+// import { setMessage } from "../../../../../shared/redux/slices/message.slices";
 
 const Personal = () => {
-  const dispatch = useDispatch();
-  const userId = useSelector((state: any) => state.transaction);
-  console.log("id", userId);
+  // const dispatch = useDispatch();
+  // const userId = useSelector((state: any) => state.transaction);
+  // console.log("id", userId);
 
-  const userData = useSelector((state: any) => state.transaction.userProfile);
-  console.log("userdata:", userData);
-  const [fetching, setFetching] = useState(false);
+  // const userData = useSelector((state: any) => state.transaction.userProfile);
+  // console.log("userdata:", userData);
+  // const [fetching, setFetching] = useState(false);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      setFetching(true);
-      try {
-        const data = GetUserProfile(userId);
-        console.log("User Profile:", data);
-      } catch (error: any) {
-        dispatch(setMessage(error.message));
-      } finally {
-        setFetching(false);
-      }
-    };
-    fetchUserProfile();
-  }, [dispatch, userId]);
+  // useEffect(() => {
+  //   const fetchUserProfile = async () => {
+  //     setFetching(true);
+  //     try {
+  //       const data = GetUserProfile(userId);
+  //       console.log("User Profile:", data);
+  //     } catch (error: any) {
+  //       dispatch(setMessage(error.message));
+  //     } finally {
+  //       setFetching(false);
+  //     }
+  //   };
+  //   fetchUserProfile();
+  // }, [dispatch, userId]);
 
   return (
     <div>
       <header>
-        <div className="flex flex-col items-center justify-between gap-5 lg:flex-row">
+        <div className="flex h-full flex-col items-center justify-between gap-5 lg:flex-row">
           <img src={profile} alt="profile" />
           <div>
             <button className="rounded-full border-2 border-side px-6 py-3 font-br-semibold">
@@ -98,32 +98,6 @@ const Personal = () => {
               type="number"
               className="mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
             />
-          </div>
-        </div>
-
-        <div className="mt-[1em] flex gap-3 sm:flex-col lg:flex-row">
-          <div className="w-full">
-            <label htmlFor="password" className="flex-start flex">
-              Country
-            </label>
-            <div className="relative flex items-center text-center">
-              <input
-                name="password"
-                id="password"
-                className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
-              />
-            </div>
-          </div>
-          <div className="w-full">
-            <label htmlFor="confirmPassword" className="flex-start flex">
-              Phone Number
-            </label>
-            <div className="relative flex items-center text-center">
-              <input
-                name="confirmPassword"
-                className="mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 focus:border-side focus:outline-none "
-              />
-            </div>
           </div>
         </div>
       </form>

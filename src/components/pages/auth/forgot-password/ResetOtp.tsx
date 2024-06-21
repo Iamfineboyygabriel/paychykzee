@@ -2,6 +2,8 @@ import { useState } from "react";
 import { button } from "../../../../shared/button/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import ReactLoading from "react-loading";
+import landingServices from "../../../../shared/redux/services/landing.services";
+import { toast } from "react-toastify";
 
 const ResetOtp = () => {
   const [loading, setLoading] = useState(false);
@@ -23,6 +25,30 @@ const ResetOtp = () => {
     navigate(`/new-password?token=${token}&email=${email}`);
     setLoading(false);
   };
+
+  const ResendOtp = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    const endpoint = `${process.env.REACT_APP_API_URL}/auth/sendVerificationToken`;
+  
+    try {
+      const response: any = await landingServices.Resend_Otp(endpoint, {
+        email: email!,
+      });
+      setLoading(false);
+  
+      if (response?.status === 201) {
+        toast.success("OTP resent successfully");
+      } else {
+        toast.error("An error occurred while resending OTP");
+      }
+    } catch (error: any) {
+      console.log("error contacting", error);
+      setLoading(false);
+      toast.error(error.message);
+    }
+  };
+  
 
   return (
     <main className="flex min-h-screen w-full items-center justify-center bg-hero-pattern bg-cover bg-center font-br-regular">
@@ -58,13 +84,16 @@ const ResetOtp = () => {
               <p className="br-font-thin text-purplewhite">
                 Didn't Receive OTP Code?
               </p>
-              <p className="font-br-semibold text-primary underline">
+              <p
+                className="font-br-semibold text-primary underline"
+                onClick={ResendOtp} // Enable resend OTP functionality
+              >
                 Resend Code
               </p>
             </div>
             <div className="mt-[3em]">
               <button.PrimaryButton
-                className={`w-full ${token.length !== 6 ? "bg-disabledPrimary cursor-not-allowed" : "text-text"}`}
+                className={`w-full ${token.length !== 6 ? "cursor-not-allowed bg-disabledPrimary" : "text-text"}`}
                 type="submit"
                 disabled={token.length !== 6 || loading}
               >

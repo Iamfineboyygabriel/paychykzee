@@ -1,14 +1,14 @@
-import { button } from "../../../../shared/button/button";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import landingServices from "../../../../shared/redux/services/landing.services";
 import { toast } from "react-toastify";
-import { useState } from "react";
 import ReactLoading from "react-loading";
+import { button } from "../../../../shared/button/button";
 
 const ForgotPassword = () => {
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const forgotPasswordFunc = async (event: React.FormEvent) => {
     event.preventDefault();

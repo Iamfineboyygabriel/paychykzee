@@ -8,6 +8,8 @@ const API_URL_LOGIN_USER = process.env.REACT_APP_API_URL + "/auth/login";
 const API_URL_PAYMENT_RATE = process.env.REACT_APP_API_URL + "/payment/rate";
 const API_URL_PEER_TO_PEER = process.env.REACT_APP_API_URL + "/payment/p2p";
 const API_URL_BILL = process.env.REACT_APP_API_URL + "/payment/bills";
+const API_URL_UPDATE_PASSWORD =
+  process.env.REACT_APP_API_URL + "/users/update-password";
 
 export interface RegisterUserRequestBody {
   firstName: string;
@@ -48,6 +50,20 @@ export interface LandingServices {
   }) => Promise<unknown>;
   Bill: (body: any) => Promise<unknown>;
   Reach_Out: (endpoint: string, body: { message: string }) => Promise<unknown>;
+  Public_Contact: (
+    endpoint: string,
+    body: {
+      message: string;
+      firstName: string;
+      phoneNumber: string;
+      email: string;
+    },
+  ) => Promise<unknown>;
+  Update_Password: (body: {
+    oldPassword: string;
+    newPassword: string;
+  }) => Promise<unknown>;
+  Resend_Otp: (endpoint: string, body: { email: string }) => Promise<unknown>;
 }
 
 const landingServices: LandingServices = {
@@ -158,6 +174,43 @@ const landingServices: LandingServices = {
     } catch (error) {
       throw new Error(
         `Error sending message: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  },
+  Public_Contact: async (endpoint, body) => {
+    try {
+      const response = await axios.post(endpoint, body, {
+        headers: authHeader(),
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(
+        `Error sending message: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  },
+  Update_Password: async (body) => {
+    try {
+      const response = await axios.post(API_URL_UPDATE_PASSWORD, body, {
+        headers: authHeader(),
+      });
+      return response.data;
+    } catch (response: unknown) {
+      console.log("Serives", response);
+      throw new Error(
+        `Error updating password: ${response instanceof Error ? response.message : String(response)}`,
+      );
+    }
+  },
+  Resend_Otp: async (body) => {
+    try {
+      const response = await axios.post(API_URL_UPDATE_PASSWORD, body, {
+        headers: authHeader(),
+      });
+      return response.data;
+    } catch (response: unknown) {
+      throw new Error(
+        `Error resending otp: ${response instanceof Error ? response.message : String(response)}`,
       );
     }
   },

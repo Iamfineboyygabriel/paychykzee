@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
-import { button } from "../../../../shared/button/button";
-import { MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
+import landingServices from "../../../../shared/redux/services/landing.services";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AxiosResponse } from "axios";
+import { MdOutlineVisibilityOff, MdOutlineVisibility } from "react-icons/md";
+import { button } from "../../../../shared/button/button";
 import { toast } from "react-toastify";
 import ReactLoading from "react-loading";
-import landingServices from "../../../../shared/redux/services/landing.services";
-import { AxiosResponse } from "axios";
 
 const NewPassword = () => {
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordType, setPasswordType] = useState("password");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);

@@ -1,11 +1,11 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
-import { button } from "../../../shared/button/button";
 import logo from "../../../assets/png/logo.png";
-import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { motion } from "framer-motion";
 import { Modal, ModalBody } from "reactstrap";
-import { useState } from "react";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { button } from "../../../shared/button/button";
 
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(true);

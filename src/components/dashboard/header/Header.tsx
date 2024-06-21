@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/png/PayChykzee.png";
 import SideModal from "../sidemodal/SideModal";
 import { AiOutlineMenu } from "react-icons/ai";
-import { Link } from "react-router-dom";
 import { button } from "../../../shared/button/button";
 
 const Header = () => {
@@ -18,6 +18,26 @@ const Header = () => {
 
   const handleLinkClick = () => {
     closeModal();
+  };
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const rememberMe = sessionStorage.getItem("rememberMe") === "true";
+
+    if (rememberMe) {
+      const email = sessionStorage.getItem("email");
+      const password = sessionStorage.getItem("password");
+      sessionStorage.clear();
+      if (email && password) {
+        sessionStorage.setItem("email", email);
+        sessionStorage.setItem("password", password);
+      }
+      sessionStorage.setItem("rememberMe", "true");
+    } else {
+      sessionStorage.clear();
+    }
+
+    navigate("/");
   };
 
   return (
@@ -78,7 +98,7 @@ const Header = () => {
             Security
           </Link>
           <div>
-            <button.PrimaryButton className="text-text">
+            <button.PrimaryButton className="text-text" onClick={handleLogout}>
               Log Out
             </button.PrimaryButton>
           </div>

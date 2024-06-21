@@ -119,6 +119,26 @@ export const Bill = createAsyncThunk(
     }
   },
 );
+export const Update_Password = createAsyncThunk(
+  "landing/updatePassword",
+  async (
+    body: {
+      oldPassword: string;
+      newPassword: string;
+    },
+    thunkAPI,
+  ) => {
+    try {
+      const data = await LandingServices.Update_Password(body);
+      return data;
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue(message);
+    }
+  },
+);
 
 export const initialState = {
   getUserRegistered: null,
@@ -127,6 +147,7 @@ export const initialState = {
   paymentRate: null,
   pair: null,
   bill: null,
+  updatePassword: null,
 };
 
 export const userSlice = createSlice({
@@ -164,11 +185,11 @@ export const userSlice = createSlice({
     builder.addCase(PeerToPeer.rejected, (state) => {
       state.pair = null;
     });
-    builder.addCase(Bill.fulfilled, (state, action) => {
-      state.bill = action.payload as null;
+    builder.addCase(Update_Password.fulfilled, (state, action) => {
+      state.updatePassword = action.payload as null;
     });
-    builder.addCase(Bill.rejected, (state) => {
-      state.bill = null;
+    builder.addCase(Update_Password.rejected, (state) => {
+      state.updatePassword = null;
     });
   },
 });

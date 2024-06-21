@@ -1,15 +1,53 @@
-import { button } from "../../../shared/button/button";
+import { useState } from "react";
+import landingServices from "../../../shared/redux/services/landing.services";
 import Modal from "../../../shared/modal//Modal";
 import image from "../../../assets/svg/success.svg";
-import { useState } from "react";
+import { button } from "../../../shared/button/button";
+import { toast } from "react-toastify";
+import ReactLoading from "react-loading";
 
 const ContactUs = () => {
+  const [firstName, setFirstName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const openModal = () => {
-  //   setIsModalOpen(true);
-  // };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const PublicCotact = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    const endpoint = `${process.env.REACT_APP_API_URL}/users/contact-us`;
+
+    try {
+      const response: any = await landingServices.Public_Contact(endpoint, {
+        message,
+        email,
+        firstName,
+        phoneNumber,
+      });
+      setLoading(false);
+
+      if (response?.status === 201) {
+        setMessage("");
+        setEmail("");
+        setFirstName("");
+        setPhoneNumber("");
+        openModal();
+      } else {
+        toast.error("An error occurred");
+      }
+    } catch (error: any) {
+      setLoading(false);
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -32,6 +70,8 @@ const ContactUs = () => {
               <label htmlFor="name">First Name</label>
               <input
                 type="text"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 id="name"
                 placeholder="Enter your full name"
                 className="rounded-md border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:bg-inherit focus:outline-none"
@@ -43,6 +83,8 @@ const ContactUs = () => {
                 <input
                   type="text"
                   id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
                   className="mt-3 w-full  rounded-md border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:outline-none"
                 />
@@ -52,6 +94,8 @@ const ContactUs = () => {
                 <input
                   type="text"
                   id="phoneNumber"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                   placeholder="Enter your phone number"
                   className="mt-3  w-full rounded-md border border-border bg-inherit p-2 placeholder:text-border focus:border-side focus:outline-none"
                 />
@@ -61,13 +105,24 @@ const ContactUs = () => {
               <label htmlFor="message">Send us a message</label>
               <textarea
                 id="message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
                 placeholder="Describe your message"
                 className="h-[180px]  border border-border bg-inherit p-2 placeholder:text-border focus:border-border focus:outline-none"
               ></textarea>
             </div>
             <div className="mt-[1.5em]">
-              <button.PrimaryButton className="w-full" >
-                Send Message
+              <button.PrimaryButton className="w-full" onClick={PublicCotact}>
+                {loading ? (
+                  <ReactLoading
+                    color="#FFFFFF"
+                    width={25}
+                    height={25}
+                    type="spin"
+                  />
+                ) : (
+                  "Send Message"
+                )}
               </button.PrimaryButton>
             </div>
           </form>
@@ -82,10 +137,6 @@ const ContactUs = () => {
           <p className="mb-4 text-center text-textp">
             You successfully sent a message to customer support team
           </p>
-
-          <button.PrimaryButton className="mt-[1.5em] w-full text-text lg:mt-[4em]">
-            Go to Home
-          </button.PrimaryButton>
         </div>
       </Modal>
     </main>
