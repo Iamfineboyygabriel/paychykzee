@@ -64,12 +64,10 @@ const Personal = () => {
     setEditMode(false);
   };
 
-  const updateUserData: React.FormEventHandler<HTMLFormElement> = async (
-    event,
-  ) => {
+  const updateUserData = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-
     setLoading(true);
+
     const body = {
       userID: userData?.id,
       firstName,
@@ -78,11 +76,11 @@ const Personal = () => {
       country,
       phoneNumber,
     };
+
     try {
       await dispatch(UpdateProfile(body)).unwrap();
       toast.success("Profile updated successfully");
       setEditMode(false);
-
       dispatch(GetUserProfile())
         .unwrap()
         .then(() => {
@@ -99,6 +97,8 @@ const Personal = () => {
         error.response?.data?.message || "Failed to update profile";
       toast.error(errorMessage);
     }
+
+    return Promise.resolve();
   };
 
   return (
@@ -115,10 +115,7 @@ const Personal = () => {
           )}
         </div>
       </header>
-      <form
-        onSubmit={updateUserData}
-        className="mt-[1.5em] w-full text-logintext"
-      >
+      <form className="mt-[1.5em] w-full text-logintext">
         <div className="flex gap-3 sm:flex-col lg:flex-row">
           <div className="w-full">
             <label htmlFor="firstName" className="flex-start flex">
@@ -193,9 +190,9 @@ const Personal = () => {
         {editMode && (
           <div className="mt-[2em] flex flex-col justify-center">
             <button.PrimaryButton
-              type="submit"
+              type="button"
               className="m-auto w-[80%]"
-              // onClick={updateUserData}
+              onClick={(event) => updateUserData(event)}
               disabled={loading}
             >
               {loading ? (

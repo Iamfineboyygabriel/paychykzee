@@ -118,17 +118,17 @@ const UserLogin: React.FC<UserLoginProps> = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   const storedEmail = sessionStorage.getItem("email");
-  //   const storedPassword = sessionStorage.getItem("password");
-  //   const storedRememberMe = sessionStorage.getItem("rememberMe");
+  useEffect(() => {
+    const storedEmail = sessionStorage.getItem("email");
+    const storedPassword = sessionStorage.getItem("password");
+    const storedRememberMe = sessionStorage.getItem("rememberMe");
 
-  //   if (storedRememberMe === "true") {
-  //     setEmail(storedEmail || "");
-  //     setPassword(storedPassword || "");
-  //     setRememberMe(true);
-  //   }
-  // }, []);
+    if (storedRememberMe === "true") {
+      setEmail(storedEmail || "");
+      setPassword(storedPassword || "");
+      setRememberMe(true);
+    }
+  }, []);
 
   const toggleRememberMe = () => {
     setRememberMe(!rememberMe);

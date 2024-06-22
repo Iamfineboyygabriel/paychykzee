@@ -29,44 +29,17 @@ const GetUserProfile = async () => {
       headers: authHeader(),
       method: "get",
     });
-    console.log("API response:", response);
 
     const token = response.data.data?.accessTokenEncrypt;
     if (token) {
       sessionStorage.setItem("userData", token);
-      console.log("New token set in sessionStorage:", token);
     }
 
     return response.data;
   } catch (error) {
-    console.error("Error fetching user profile:", error);
     throw error;
   }
 };
-
-// const UpdateProfile = async ({ userID }: any) => {
-//   const url = `${process.env.REACT_APP_API_URL}/users/${userID}`;
-//   try {
-//     const response = await axios({
-//       url,
-//       headers: authHeader(),
-//       method: "patch",
-//     });
-//     console.log("API response:", response);
-
-//     const token = response.data.data?.accessTokenEncrypt;
-//     const Id = response.data.data.id;
-//     if (token) {
-//       sessionStorage.setItem("userData", token);
-//       console.log("New token set in sessionStorage:", token);
-//     }
-
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error fetching user profile:", error);
-//     throw error;
-//   }
-// };
 
 const UpdateProfile = async (params: UpdateProfileParams) => {
   const { userID, ...updateData } = params;
@@ -79,7 +52,6 @@ const UpdateProfile = async (params: UpdateProfileParams) => {
       method: "patch",
       data: updateData,
     });
-    console.log("API response:", response);
 
     const token = response.data.data?.accessTokenEncrypt;
     if (token) {
