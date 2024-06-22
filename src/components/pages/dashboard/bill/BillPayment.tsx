@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { countries as countryData } from "country-data";
 import Flag from "react-world-flags";
 import useCloudinaryImageUpload from "../../../../shared/redux/hooks/useCloudinaryImageUpload";
 import { ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
@@ -213,6 +212,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   );
 };
 
+const countries: Country[] = [
+  { name: "Europe", code: "EU" },
+  { name: "United States", code: "US" },
+  { name: "Nigeria", code: "NG" },
+  { name: "Canada", code: "CA" },
+];
+
 const BillPayment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -241,10 +247,6 @@ const BillPayment = () => {
   const currencyList = useSelector(
     (state: any) => state.transaction.getCurrencies,
   );
-  const countryList: Country[] = countryData.all.map((country: any) => ({
-    name: country.name,
-    code: country.alpha2,
-  }));
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -413,6 +415,7 @@ const BillPayment = () => {
     setUploadedFileNames([]);
     setInvoiceDocument("");
     clearFileInput();
+    setIsModalOpen(false);
   };
 
   const clearFileInput = () => {
@@ -450,22 +453,21 @@ const BillPayment = () => {
                   htmlFor="country"
                   className="flex-start flex font-br-semibold text-xs text-textp"
                 >
-                  Country
+                  Select Country
                 </label>
-                <div className="relative mt-[1em]">
+                <div className="relative mt-1">
                   <button
                     type="button"
-                    className="w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3 text-left"
+                    className="mt-[10px] w-full rounded-lg border-[2px] border-border bg-inherit bg-input p-3 text-left text-textp"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
                     {country ? (
                       <div className="flex items-center">
                         <Flag
                           code={country.code}
-                          key={country.code}
                           style={{
-                            width: "32px",
-                            height: "32px",
+                            width: "24px",
+                            height: "24px",
                             marginRight: "8px",
                           }}
                         />
@@ -476,27 +478,36 @@ const BillPayment = () => {
                     )}
                   </button>
                   {isDropdownOpen && (
-                    <div
-                      ref={dropdownRef}
-                      className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input"
-                    >
-                      {countryList.map((country) => (
-                        <div
-                          key={country.code}
-                          onClick={() => handleCountrySelect(country)}
-                          className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
-                        >
-                          <Flag
-                            code={country.code}
-                            style={{
-                              width: "32px",
-                              height: "32px",
-                              marginRight: "8px",
-                            }}
-                          />
-                          {country.name}
-                        </div>
-                      ))}
+                    <div className="absolute mt-1 h-[8em] w-full overflow-auto  shadow-lg">
+                      <ul
+                        tabIndex={-1}
+                        role="listbox"
+                        aria-labelledby="listbox-label"
+                        aria-activedescendant="listbox-option-3"
+                        className="max-h- overflow-auto bg-input py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                      >
+                        {countries.map((country) => (
+                          <li
+                            key={country.code}
+                            className="hover:bg-primary-500 relative cursor-pointer select-none py-2 pl-3 pr-9 text-gray-900 hover:text-white"
+                            onClick={() => handleCountrySelect(country)}
+                          >
+                            <div className="flex items-center">
+                              <Flag
+                                code={country.code}
+                                style={{
+                                  width: "24px",
+                                  height: "24px",
+                                  marginRight: "8px",
+                                }}
+                              />
+                              <span className="block truncate text-white">
+                                {country.name}
+                              </span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )}
                 </div>
@@ -541,7 +552,7 @@ const BillPayment = () => {
                   {isCurrencyDropdown && (
                     <div
                       ref={dropdownRef}
-                      className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input"
+                      className="absolute z-10 mt-2 max-h-[170px] w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input "
                     >
                       {currencyList.data.map((currency: any) => (
                         <div
@@ -579,7 +590,7 @@ const BillPayment = () => {
                 </div>
               </div>
             </div>
-            <div className="mt-[2em] flex flex-col gap-[2em] lg:flex-row">
+            <div className="mt-[4em] flex flex-col gap-[2em] lg:flex-row">
               <FileUploader
                 onFileChange={handleFileChange}
                 reset={resetFileInput}

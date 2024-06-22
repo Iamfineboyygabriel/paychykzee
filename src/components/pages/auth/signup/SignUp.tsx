@@ -15,6 +15,7 @@ import image from "../../../../assets/svg/hand.svg";
 import { TokenModal } from "../../../../shared/modal/TokenModal";
 import ReactLoading from "react-loading";
 import { SuccessModal } from "../../../../shared/modal/SuccessModal";
+import landingServices from "../../../../shared/redux/services/landing.services";
 
 interface SignUpProps {
   emailInputProps?: {
@@ -74,10 +75,6 @@ const SignUp: React.FC<SignUpProps> = () => {
     );
   };
 
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
   const handleConfirmPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -97,10 +94,6 @@ const SignUp: React.FC<SignUpProps> = () => {
     setToken("");
   };
 
-  const registerUser = useAppSelector(
-    (state: any) => state.landing.getUserRegistered,
-  );
-  console.log("registerUser", registerUser);
   const areFieldsFilled = () => {
     return (
       firstName &&
@@ -112,6 +105,11 @@ const SignUp: React.FC<SignUpProps> = () => {
       confirmPasswordValue
     );
   };
+
+  const registerUser = useAppSelector(
+    (state: any) => state.landing.getUserRegistered,
+  );
+  console.log("registerUser", registerUser);
 
   const registerUserData: React.FormEventHandler<HTMLFormElement> = async (
     event,
@@ -142,7 +140,7 @@ const SignUp: React.FC<SignUpProps> = () => {
         setLoading(false);
         setFirstName("");
         setLastName("");
-        setEmail("");
+        setUserEmail(email);
         setCountry("");
         setPhoneNumber("");
         setPassword("");
@@ -150,19 +148,8 @@ const SignUp: React.FC<SignUpProps> = () => {
         setIsModalOpen(true);
         setToken("");
       })
-      .catch((error) => {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          toast.error(error.response.data.message);
-        } else if (error.message) {
-          toast.error(error.message);
-        } else {
-          toast.error(String(error));
-        }
-
+      .catch(() => {
+        toast.error("Email already exist");
         setLoading(false);
       });
     setUserEmail(email);
@@ -179,9 +166,9 @@ const SignUp: React.FC<SignUpProps> = () => {
       await dispatch(VerifyUserAuth(body)).unwrap();
       setModalType("proceed");
       setIsModalOpen(false);
-      toast.success("User verified successfully");
-    } catch (error) {
-      toast.error(String(error));
+      setEmail("");
+    } catch (error: any) {
+      toast.error(error);
     } finally {
       setLoading(false);
     }
@@ -192,6 +179,28 @@ const SignUp: React.FC<SignUpProps> = () => {
       await verifyUserData(userEmail, token);
     } else {
       toast.error("Invalid token");
+    }
+  };
+
+  const ResendOtp = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    const endpoint = `${process.env.REACT_APP_API_URL}/auth/sendVerificationToken`;
+
+    try {
+      const response: any = await landingServices.Resend_Otp(endpoint, {
+        email: userEmail,
+      });
+      setLoading(false);
+
+      if (response?.status === 200) {
+        toast.success(response.message);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (response: any) {
+      setLoading(false);
+      toast.error(response?.message);
     }
   };
 
@@ -245,7 +254,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                   type="text"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
-                  className=" mt-[1em] w-full rounded-lg border-[2px] bg-inherit p-3 focus:border-side focus:outline-none"
+                  className=" mt-[1em] w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                 />
               </div>
             </div>
@@ -313,7 +322,7 @@ const SignUp: React.FC<SignUpProps> = () => {
                     id="password"
                     type={passwordType}
                     value={password}
-                    onChange={handlePasswordChange}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="mt-[1em] flex w-full rounded-lg border-[2px] border-border bg-inherit p-3 focus:border-side focus:outline-none"
                   />
                   <button
@@ -392,6 +401,7 @@ const SignUp: React.FC<SignUpProps> = () => {
           handleTokenChange={handleTokenChange}
           token={token}
           handleVerifyUser={handleVerifyUser}
+          ResendOtp={ResendOtp}
         />
       )}
 

@@ -9,6 +9,7 @@ interface TokenModalProps {
   handleVerifyUser: () => Promise<void>;
   isOpen: boolean;
   onClose: () => void;
+  ResendOtp: (event: React.FormEvent) => void;
 }
 
 export const TokenModal: React.FC<TokenModalProps> = ({
@@ -17,6 +18,7 @@ export const TokenModal: React.FC<TokenModalProps> = ({
   handleVerifyUser,
   isOpen,
   onClose,
+  ResendOtp,
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +31,6 @@ export const TokenModal: React.FC<TokenModalProps> = ({
     } finally {
       setLoading(false);
     }
-    
   };
 
   return (
@@ -60,15 +61,18 @@ export const TokenModal: React.FC<TokenModalProps> = ({
               <p className="br-font-thin text-purplewhite">
                 Didn't Receive OTP Code?
               </p>
-              <p className="font-br-semibold text-primary underline">
-                Resend Code in 60 secs
+              <p
+                className="cursor-pointer font-br-semibold text-primary underline"
+                onClick={ResendOtp}
+              >
+                Resend Code
               </p>
             </div>
           </div>
           <div className="mt-[3em]">
             <button.PrimaryButton
               onClick={handleVerifyUserWrapper}
-              className={`w-full ${token.length !== 6 ? "bg-disabledPrimary cursor-not-allowed" : "text-text"}`}
+              className={`w-full ${token.length !== 6 ? "cursor-not-allowed bg-disabledPrimary" : "text-text"}`}
               disabled={token.length !== 6 || loading}
             >
               {loading ? (

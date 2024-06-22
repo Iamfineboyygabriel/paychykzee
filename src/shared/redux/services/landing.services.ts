@@ -73,52 +73,39 @@ const landingServices: LandingServices = {
     }
     try {
       const response = await axios.post(API_URL_REGISTER_USER, body, {});
-      return response.data;
+      return response?.data;
     } catch (error: unknown) {
       throw new Error(
         `Error registering user: ${error instanceof Error ? error.message : String(error)}`,
       );
     }
   },
+
   VerifyUserAuth: async (body) => {
     try {
-      await axios.post(API_URL_VERIFY_USER, body, {
+      const response = await axios.post(API_URL_VERIFY_USER, body, {
         headers: authHeader(),
       });
-    } catch (error: unknown) {
-      throw new Error(
-        `Error verifying user auth: ${error instanceof Error ? error.message : String(error)}`,
-      );
+      return response?.data;
+    } catch (error: any) {
+      throw error.response?.data?.message || new Error("Verification failed");
     }
   },
 
-  // LoginUser: async (body) => {
-  //   try {
-  //     const response = await axios.post(API_URL_LOGIN_USER, body, {});
-  //     const token = response.data.data.accessTokenEncrypt;
-  //     if (token) {
-  //       sessionStorage.setItem("userData", token);
-  //       return response.data;
-  //     } else {
-  //       throw new Error("Token not found in response");
-  //     }
-  //   } catch (error) {
-  //     throw new Error(
-  //       `Error logging in: ${error instanceof Error ? error.message : String(error)}`,
-  //     );
-  //   }
-  // },
   LoginUser: async (body) => {
     try {
-      const response: any = await axios.post(API_URL_LOGIN_USER, body, {});
+      const response = await axios.post(API_URL_LOGIN_USER, body, {});
       const token = response.data.data.accessTokenEncrypt;
       if (token) {
         sessionStorage.setItem("userData", token);
+        return response.data;
+      } else {
+        throw new Error("Token not found in response");
       }
-      return response?.data;
-    } catch (response: any) {
-      console.log("response", response);
-      return response?.response?.data;
+    } catch (error) {
+      throw new Error(
+        `Error logging in: ${error instanceof Error ? error.message : String(error)}`,
+      );
     }
   },
 
@@ -133,14 +120,22 @@ const landingServices: LandingServices = {
     }
   },
 
+  // Reset_Password: async (endpoint, body) => {
+  //   try {
+  //     const response = await axios.post(endpoint, body);
+  //     return response.data;
+  //   } catch (error) {
+  //     throw new Error(
+  //       `Error Reseting Password: ${error instanceof Error ? error.message : String(error)}`,
+  //     );
+  //   }
+  // },
   Reset_Password: async (endpoint, body) => {
     try {
       const response = await axios.post(endpoint, body);
       return response.data;
-    } catch (error) {
-      throw new Error(
-        `Error Reseting Password: ${error instanceof Error ? error.message : String(error)}`,
-      );
+    } catch (response: any) {
+      return response?.response?.data;
     }
   },
   Payment_Rate: async (body) => {
@@ -214,16 +209,13 @@ const landingServices: LandingServices = {
       return response?.response?.data;
     }
   },
-  Resend_Otp: async (body) => {
+
+  Resend_Otp: async (endpoint, body) => {
     try {
-      const response = await axios.post(API_URL_UPDATE_PASSWORD, body, {
-        headers: authHeader(),
-      });
+      const response = await axios.post(endpoint, body);
       return response.data;
-    } catch (response: unknown) {
-      throw new Error(
-        `Error resending otp: ${response instanceof Error ? response.message : String(response)}`,
-      );
+    } catch (response: any) {
+      return response?.response?.data;
     }
   },
 };

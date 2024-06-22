@@ -24,27 +24,16 @@ const Modal: React.FC<ModalProps> = ({
     function handleEscapeKeyPress(event: KeyboardEvent) {
       if (event.key === "Escape") {
         onClose();
-        setModalType && setModalType(""); // Add this line
-      }
-    }
-
-    function handleClickOutside(event: MouseEvent | TouchEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        onClose();
-        setModalType && setModalType(""); // Add this line
+        setModalType && setModalType("");
       }
     }
 
     if (isOpen) {
       document.addEventListener("keydown", handleEscapeKeyPress, true);
-      document.addEventListener("mousedown", handleClickOutside, true);
-      document.addEventListener("touchstart", handleClickOutside, true);
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscapeKeyPress, true);
-      document.removeEventListener("mousedown", handleClickOutside, true);
-      document.removeEventListener("touchstart", handleClickOutside, true);
     };
   }, [isOpen, onClose, setModalType]);
 

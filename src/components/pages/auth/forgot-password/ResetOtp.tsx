@@ -3,7 +3,6 @@ import { button } from "../../../../shared/button/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import ReactLoading from "react-loading";
 import landingServices from "../../../../shared/redux/services/landing.services";
-import { toast } from "react-toastify";
 
 const ResetOtp = () => {
   const [loading, setLoading] = useState(false);
@@ -30,25 +29,12 @@ const ResetOtp = () => {
     event.preventDefault();
     setLoading(true);
     const endpoint = `${process.env.REACT_APP_API_URL}/auth/sendVerificationToken`;
-  
-    try {
-      const response: any = await landingServices.Resend_Otp(endpoint, {
-        email: email!,
-      });
-      setLoading(false);
-  
-      if (response?.status === 201) {
-        toast.success("OTP resent successfully");
-      } else {
-        toast.error("An error occurred while resending OTP");
-      }
-    } catch (error: any) {
-      console.log("error contacting", error);
-      setLoading(false);
-      toast.error(error.message);
-    }
+
+    await landingServices.Resend_Otp(endpoint, {
+      email: email!,
+    });
+    setLoading(false);
   };
-  
 
   return (
     <main className="flex min-h-screen w-full items-center justify-center bg-hero-pattern bg-cover bg-center font-br-regular">
@@ -85,8 +71,8 @@ const ResetOtp = () => {
                 Didn't Receive OTP Code?
               </p>
               <p
-                className="font-br-semibold text-primary underline"
-                onClick={ResendOtp} // Enable resend OTP functionality
+                className="cursor-pointer font-br-semibold text-primary underline"
+                onClick={ResendOtp}
               >
                 Resend Code
               </p>

@@ -118,7 +118,7 @@ const Security: React.FC<SecurityProps> = () => {
                   type={oldPasswordType}
                   value={oldPassword}
                   onChange={(e) => setOldPassword(e.target.value)}
-                  className="mt-[1em] flex w-full rounded-lg border-[2px] border-border  bg-inherit p-3 focus:border-focus:outline-none "
+                  className="focus:border-focus:outline-none mt-[1em] flex w-full rounded-lg border-[2px]  border-border bg-inherit p-3 "
                 />
                 <button
                   type="button"
