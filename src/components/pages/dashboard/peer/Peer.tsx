@@ -200,7 +200,7 @@ const Peer = () => {
         PeerToPeer(body),
       ).unwrap()) as PeerToPeerResponse;
 
-      setRedirectUrl(response.data.redirectUrl);
+      setRedirectUrl(response?.data?.redirectUrl);
       return true;
     } catch (error: any) {
       const errorMessage =
@@ -293,13 +293,13 @@ const Peer = () => {
                         ref={dropdownRef}
                         className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input"
                       >
-                        {currencyList.data.map((currency: any) => (
+                        {currencyList?.data?.map((currency: any) => (
                           <div
-                            key={currency.code}
+                            key={currency?.code}
                             className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                             onClick={() => handleBaseCurrencySelect(currency)}
                           >
-                            {currency.name}
+                            {currency?.name}
                           </div>
                         ))}
                       </div>
@@ -372,13 +372,13 @@ const Peer = () => {
                         ref={dropdownRef}
                         className="absolute z-10 mt-2 max-h-60 w-full overflow-auto rounded-lg border-[2px] bg-inherit bg-input"
                       >
-                        {currencyList.data.map((currency: any) => (
+                        {currencyList?.data?.map((currency: any) => (
                           <div
-                            key={currency.code}
+                            key={currency?.code}
                             className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                             onClick={() => handlePeerCurrencySelect(currency)}
                           >
-                            {currency.name}
+                            {currency?.name}
                           </div>
                         ))}
                       </div>

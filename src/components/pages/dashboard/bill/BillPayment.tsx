@@ -77,7 +77,7 @@ const BillPayment = () => {
   const userToken = sessionStorage.getItem("userData");
 
   const currencyList = useSelector(
-    (state: any) => state.transaction.getCurrencies,
+    (state: any) => state?.transaction?.getCurrencies,
   );
 
   useEffect(() => {
@@ -303,7 +303,7 @@ const BillPayment = () => {
                             marginRight: "8px",
                           }}
                         />
-                        {country.name}
+                        {country?.name}
                       </div>
                     ) : (
                       "Select a country"
@@ -318,7 +318,7 @@ const BillPayment = () => {
                         aria-activedescendant="listbox-option-3"
                         className="max-h- overflow-auto bg-input py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                       >
-                        {countries.map((country) => (
+                        {countries?.map((country) => (
                           <li
                             key={country.code}
                             className="hover:bg-primary-500 relative cursor-pointer select-none py-2 pl-3 pr-9 text-gray-900 hover:text-white"
@@ -334,7 +334,7 @@ const BillPayment = () => {
                                 }}
                               />
                               <span className="block truncate text-white">
-                                {country.name}
+                                {country?.name}
                               </span>
                             </div>
                           </li>
@@ -386,13 +386,13 @@ const BillPayment = () => {
                       ref={dropdownRef}
                       className="absolute z-10 mt-2 max-h-[170px] w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input "
                     >
-                      {currencyList.data.map((currency: any) => (
+                      {currencyList?.data?.map((currency: any) => (
                         <div
                           key={currency.code}
                           className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                           onClick={() => handleBaseCurrencySelect(currency)}
                         >
-                          {currency.name}
+                          {currency?.name}
                         </div>
                       ))}
                     </div>

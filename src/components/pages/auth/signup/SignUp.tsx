@@ -289,9 +289,9 @@ const SignUp: React.FC<SignUpProps> = () => {
                     <option
                       className="bg-purpleblack text-text"
                       key={country.code}
-                      value={country.code}
+                      value={country?.code}
                     >
-                      {country.name}
+                      {country?.name}
                     </option>
                   ))}
                 </select>

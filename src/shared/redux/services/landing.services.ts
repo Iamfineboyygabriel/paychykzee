@@ -192,7 +192,7 @@ const landingServices: LandingServices = {
       const response = await axios.post(endpoint, body, {
         headers: authHeader(),
       });
-      return response.data;
+      return response?.data;
     } catch (error) {
       throw new Error(
         `Error sending message: ${error instanceof Error ? error.message : String(error)}`,
@@ -204,7 +204,7 @@ const landingServices: LandingServices = {
       const response = await axios.post(API_URL_UPDATE_PASSWORD, body, {
         headers: authHeader(),
       });
-      return response.data;
+      return response?.data;
     } catch (response: any) {
       return response?.response?.data;
     }
@@ -213,7 +213,7 @@ const landingServices: LandingServices = {
   Resend_Otp: async (endpoint, body) => {
     try {
       const response = await axios.post(endpoint, body);
-      return response.data;
+      return response?.data;
     } catch (response: any) {
       return response?.response?.data;
     }

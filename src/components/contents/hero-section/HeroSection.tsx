@@ -18,10 +18,10 @@ const HeroSection = () => {
           </p>
         </article>
         <header>
-          <h1 className="gradient-text font-br-bold text-[2em] sm:text-[2em] lg:text-[4em]">
+          <h1 className="gradient-text animate__animated animate__zoomIn font-br-bold text-[2em] sm:text-[2em] lg:text-[4em]">
             Welcome
           </h1>
-          <h1 className="gradient-text font-br-bold text-[2em] sm:text-[2em] lg:text-[4em]">
+          <h1 className="gradient-text font-br-bold animate__animated animate__zoomIn text-[2em] sm:text-[2em] lg:text-[4em]">
             to Pay ChyKzee
           </h1>
         </header>

@@ -16,7 +16,7 @@ const GetCurrencies = async () => {
     url,
     headers: authHeader(),
     method: "get",
-  }).then((response) => {
+  }).then((response: any) => {
     return response.data;
   });
 };

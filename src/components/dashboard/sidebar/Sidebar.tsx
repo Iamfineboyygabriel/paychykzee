@@ -6,6 +6,7 @@ import activepeer from "../../../assets/svg/activepeer.svg";
 import inactivebill from "../../../assets/svg/inactive-bill.svg";
 import activebill from "../../../assets/svg/active-bill.svg";
 import contact from "../../../assets/svg/contact.svg";
+import settings from "../../../assets/svg/settings-01 (1).svg";
 
 const Sidebar = () => {
   return (
@@ -100,7 +101,7 @@ const Sidebar = () => {
           >
             {({ isActive }) => (
               <>
-                <img src={isActive ? contact : contact} alt="settings" />
+                <img src={isActive ? settings : settings} alt="settings" />
                 <span className="ml-2">Settings</span>
               </>
             )}

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import landingServices from "../../../shared/redux/services/landing.services";
-import Modal from "../../../shared/modal//Modal";
+import Modal from "../../../shared/modal/Modal";
 import image from "../../../assets/svg/success.svg";
 import { button } from "../../../shared/button/button";
 import { toast } from "react-toastify";
@@ -13,10 +13,20 @@ const ContactUs = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    if (firstName && phoneNumber && email && message) {
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(false);
+    }
+  }, [firstName, phoneNumber, email, message]);
 
   const openModal = () => {
     setIsModalOpen(true);
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -65,7 +75,10 @@ const ContactUs = () => {
           </div>
         </header>
         <section>
-          <form className="m-auto mt-[2em] border border-border px-[1.5em] py-[2em] text-text lg:w-[70%] lg:px-[5em]">
+          <form
+            className="m-auto mt-[2em] border border-border px-[1.5em] py-[2em] text-text lg:w-[70%] lg:px-[5em]"
+            onSubmit={PublicCotact}
+          >
             <div className="flex flex-col gap-3">
               <label htmlFor="name">First Name</label>
               <input
@@ -112,7 +125,10 @@ const ContactUs = () => {
               ></textarea>
             </div>
             <div className="mt-[1.5em]">
-              <button.PrimaryButton className="w-full" onClick={PublicCotact}>
+              <button.PrimaryButton
+                className={`w-full ${!isFormValid ? "bg-disabledPrimary text-gray-500" : "text-white"}`}
+                disabled={!isFormValid || loading}
+              >
                 {loading ? (
                   <ReactLoading
                     color="#FFFFFF"
