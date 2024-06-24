@@ -80,7 +80,6 @@ const Security: React.FC<SecurityProps> = () => {
       const response: any = await dispatch(Update_Password(body)).unwrap();
 
       if (response?.status === 201) {
-        toast.success(response.message);
         openModal();
         setOldPassword("");
         setNewPassword("");
