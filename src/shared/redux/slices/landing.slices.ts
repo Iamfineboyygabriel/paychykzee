@@ -6,22 +6,11 @@ import type { RegisterUserRequestBody } from "../services/landing.services";
 export const RegisterUser = createAsyncThunk(
   "landing/registerUser",
   async (body: RegisterUserRequestBody, thunkAPI) => {
-    if (!body) {
-      return thunkAPI.rejectWithValue("Body is required");
-    }
     try {
       const data = await LandingServices.RegisterUser(body);
       return { landing: data };
     } catch (error: any) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message &&
-          error.response.message) ||
-        error.message ||
-        error.data.message ||
-        error.data ||
-        error.toString();
+      const message = error?.message;
       thunkAPI.dispatch(setMessage(message));
       return thunkAPI.rejectWithValue(message);
     }
@@ -46,6 +35,7 @@ export const VerifyUserAuth = createAsyncThunk(
     }
   },
 );
+
 export const LoginUser = createAsyncThunk(
   "landing/loginUser",
   async (body: { email: string; password: string }, thunkAPI) => {
@@ -53,12 +43,7 @@ export const LoginUser = createAsyncThunk(
       const data = await LandingServices.LoginUser(body);
       return { landing: data };
     } catch (error: any) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
+      const message = error?.message;
       thunkAPI.dispatch(setMessage(message));
       return thunkAPI.rejectWithValue(message);
     }
@@ -119,6 +104,7 @@ export const Bill = createAsyncThunk(
     }
   },
 );
+
 export const Update_Password = createAsyncThunk(
   "landing/updatePassword",
   async (
@@ -132,8 +118,7 @@ export const Update_Password = createAsyncThunk(
       const data = await LandingServices.Update_Password(body);
       return data;
     } catch (error: any) {
-      const message =
-        error.response?.data?.message || error.message || error.toString();
+      const message = error;
       thunkAPI.dispatch(setMessage(message));
       return thunkAPI.rejectWithValue(message);
     }

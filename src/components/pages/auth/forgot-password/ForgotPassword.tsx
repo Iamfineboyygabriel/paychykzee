@@ -21,11 +21,8 @@ const ForgotPassword = () => {
       });
       setLoading(false);
 
-      if (
-        response?.status === 200 &&
-        response?.message === "Verification email sent"
-      ) {
-        toast.success("OTP sent successfully");
+      if (response?.status === 200) {
+        toast.success(response.message);
         navigate(`/reset-otp?email=${email}`);
       } else {
         toast.error("An error occurred");

@@ -1,27 +1,6 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 const Settings = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    const rememberMe = sessionStorage.getItem("rememberMe") === "true";
-
-    if (rememberMe) {
-      const email = sessionStorage.getItem("email");
-      const password = sessionStorage.getItem("password");
-      sessionStorage.clear();
-      if (email && password) {
-        sessionStorage.setItem("email", email);
-        sessionStorage.setItem("password", password);
-      }
-      sessionStorage.setItem("rememberMe", "true");
-    } else {
-      sessionStorage.clear();
-    }
-
-    navigate("/");
-  };
-
   return (
     <main className="font-br-regular">
       <h1 className="font-br-semibold text-xl lg:text-2xl">Settings</h1>
@@ -61,11 +40,6 @@ const Settings = () => {
                   </p>
                 </div>
               </NavLink>
-            </div>
-            <div className="ml-[3em] mt-[3em] text-textp">
-              <p onClick={handleLogout} className="cursor-pointer">
-                Log Out
-              </p>
             </div>
           </nav>
         </div>

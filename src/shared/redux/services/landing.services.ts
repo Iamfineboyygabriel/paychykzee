@@ -68,16 +68,24 @@ export interface LandingServices {
 
 const landingServices: LandingServices = {
   RegisterUser: async (body) => {
-    if (!body) {
-      throw new Error("RegisterUserRequestBody is required");
-    }
     try {
       const response = await axios.post(API_URL_REGISTER_USER, body, {});
-      return response?.data;
-    } catch (error: unknown) {
-      throw new Error(
-        `Error registering user: ${error instanceof Error ? error.message : String(error)}`,
-      );
+      return response.data;
+    } catch (error: any) {
+      throw error.response.data;
+    }
+  },
+
+  LoginUser: async (body) => {
+    try {
+      const response = await axios.post(API_URL_LOGIN_USER, body, {});
+      const token = response.data.data.accessTokenEncrypt;
+      if (token) {
+        sessionStorage.setItem("userData", token);
+        return response.data;
+      }
+    } catch (error: any) {
+      throw error.response.data;
     }
   },
 
@@ -92,23 +100,6 @@ const landingServices: LandingServices = {
     }
   },
 
-  LoginUser: async (body) => {
-    try {
-      const response = await axios.post(API_URL_LOGIN_USER, body, {});
-      const token = response.data.data.accessTokenEncrypt;
-      if (token) {
-        sessionStorage.setItem("userData", token);
-        return response.data;
-      } else {
-        throw new Error("Token not found in response");
-      }
-    } catch (error) {
-      throw new Error(
-        `Error logging in: ${error instanceof Error ? error.message : String(error)}`,
-      );
-    }
-  },
-
   Forgot_Password: async (endpoint, body) => {
     try {
       const response = await axios.post(endpoint, body);
@@ -120,16 +111,6 @@ const landingServices: LandingServices = {
     }
   },
 
-  // Reset_Password: async (endpoint, body) => {
-  //   try {
-  //     const response = await axios.post(endpoint, body);
-  //     return response.data;
-  //   } catch (error) {
-  //     throw new Error(
-  //       `Error Reseting Password: ${error instanceof Error ? error.message : String(error)}`,
-  //     );
-  //   }
-  // },
   Reset_Password: async (endpoint, body) => {
     try {
       const response = await axios.post(endpoint, body);
@@ -199,14 +180,15 @@ const landingServices: LandingServices = {
       );
     }
   },
+
   Update_Password: async (body) => {
     try {
       const response = await axios.post(API_URL_UPDATE_PASSWORD, body, {
         headers: authHeader(),
       });
       return response?.data;
-    } catch (response: any) {
-      return response?.response?.data;
+    } catch (error: any) {
+      return error?.response?.data;
     }
   },
 

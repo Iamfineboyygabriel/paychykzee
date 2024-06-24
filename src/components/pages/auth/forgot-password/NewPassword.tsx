@@ -24,37 +24,6 @@ const NewPassword = () => {
     setToken(queryParams.get("token") || "");
   }, [location]);
 
-  // const resetPasswordFunc = async (event: React.FormEvent) => {
-  //   event.preventDefault();
-
-  //   if (password !== confirmPassword) {
-  //     toast.error("Passwords do not match");
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   const endpoint = `${process.env.REACT_APP_API_URL}/auth/resetPassword`;
-
-  //   try {
-  //     const response = (await landingServices.Reset_Password(endpoint, {
-  //       email,
-  //       token,
-  //       password,
-  //     })) as AxiosResponse<any, any>;
-
-  //     if (response.status === 200) {
-  //       toast.success("Password Reset Successfully");
-  //       navigate("/login");
-  //     } else {
-  //       toast.error(response.data.message);
-  //     }
-  //   } catch (e) {
-  //     toast.error("Network error, kindly check your internet connection");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const resetPasswordFunc = async (event: React.FormEvent) => {
     event.preventDefault();
 

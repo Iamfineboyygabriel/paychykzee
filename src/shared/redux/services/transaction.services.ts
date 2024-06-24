@@ -56,12 +56,10 @@ const UpdateProfile = async (params: UpdateProfileParams) => {
     const token = response.data.data?.accessTokenEncrypt;
     if (token) {
       sessionStorage.setItem("userData", token);
-      console.log("New token set in sessionStorage:", token);
     }
 
     return response.data;
   } catch (error) {
-    console.error("Error updating user profile:", error);
     throw error;
   }
 };

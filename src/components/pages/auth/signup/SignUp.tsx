@@ -106,11 +106,6 @@ const SignUp: React.FC<SignUpProps> = () => {
     );
   };
 
-  const registerUser = useAppSelector(
-    (state: any) => state.landing.getUserRegistered,
-  );
-  console.log("registerUser", registerUser);
-
   const registerUserData: React.FormEventHandler<HTMLFormElement> = async (
     event,
   ) => {
@@ -148,8 +143,8 @@ const SignUp: React.FC<SignUpProps> = () => {
         setIsModalOpen(true);
         setToken("");
       })
-      .catch(() => {
-        toast.error("Email already exist");
+      .catch((error) => {
+        toast.error(error);
         setLoading(false);
       });
     setUserEmail(email);

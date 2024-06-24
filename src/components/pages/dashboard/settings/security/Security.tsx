@@ -63,30 +63,36 @@ const Security: React.FC<SecurityProps> = () => {
   const dispatch: AppDispatch = useDispatch();
 
   const UpdatePassword = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    try {
+      event.preventDefault();
 
-    if (!passwordsMatch) {
-      toast.error("Passwords do not match");
-      return;
-    }
+      if (!passwordsMatch) {
+        toast.error("Passwords do not match");
+        return;
+      }
 
-    setLoading(true);
-    let body = {
-      newPassword,
-      oldPassword,
-    };
-    const response: any = await dispatch(Update_Password(body)).unwrap();
-    if (response.status !== 200) {
+      setLoading(true);
+      let body = {
+        newPassword,
+        oldPassword,
+      };
+
+      const response: any = await dispatch(Update_Password(body)).unwrap();
+
+      if (response?.status === 201) {
+        toast.success(response.message);
+        openModal();
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPasswordValue("");
+      } else {
+        toast.error(response?.message || "check your network");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "check your network");
+    } finally {
       setLoading(false);
-      toast.error(response?.message);
-      setLoading(false);
-      return;
     }
-    console.log("Response:", response);
-    openModal();
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPasswordValue("");
   };
 
   useEffect(() => {
