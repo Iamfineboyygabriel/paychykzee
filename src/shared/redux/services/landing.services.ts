@@ -79,13 +79,13 @@ const landingServices: LandingServices = {
   LoginUser: async (body) => {
     try {
       const response = await axios.post(API_URL_LOGIN_USER, body, {});
-      const token = response.data.data.accessTokenEncrypt;
+      const token = response?.data?.data?.accessTokenEncrypt;
       if (token) {
         sessionStorage.setItem("userData", token);
-        return response.data;
+        return response?.data;
       }
     } catch (error: any) {
-      throw error.response.data;
+      throw error?.response?.data;
     }
   },
 

@@ -54,39 +54,6 @@ const UserLogin: React.FC<UserLoginProps> = () => {
     navigate("/");
   };
 
-  // const loginUserData: React.FormEventHandler<HTMLFormElement> = async (
-  //   event,
-  // ) => {
-  //   event.preventDefault();
-
-  //   setLoading(true);
-  //   let body = {
-  //     email,
-  //     password,
-  //   };
-  //   try {
-  //     const response = await dispatch(LoginUser(body)).unwrap();
-  //     console.log("Response:", response);
-  //     setLoading(false);
-  //     navigate("/dashboard/home");
-  //     toast.success("Wellcome");
-  //   } catch (error: any) {
-  //     setLoading(false);
-  //     const errorMessage =
-  //       error.response?.data?.message || "Invalid credentials";
-  //     toast.error(errorMessage);
-  //   }
-  //   if (rememberMe) {
-  //     sessionStorage.setItem("email", email);
-  //     sessionStorage.setItem("password", password);
-  //     sessionStorage.setItem("rememberMe", JSON.stringify(rememberMe));
-  //   } else {
-  //     sessionStorage.removeItem("email");
-  //     sessionStorage.removeItem("password");
-  //     sessionStorage.removeItem("rememberMe");
-  //   }
-  // };
-
   const loginUserData: React.FormEventHandler<HTMLFormElement> = async (
     event,
   ) => {
@@ -98,8 +65,7 @@ const UserLogin: React.FC<UserLoginProps> = () => {
       password,
     };
     try {
-      const response = await dispatch(LoginUser(body)).unwrap();
-      console.log("Response:", response);
+      await dispatch(LoginUser(body)).unwrap();
       setLoading(false);
       navigate("/dashboard/home");
       toast.success("Welcome");

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../shared/redux/store";
-import { useAppSelector } from "../../../../shared/redux/reduxHooks";
 import {
   RegisterUser,
   VerifyUserAuth,

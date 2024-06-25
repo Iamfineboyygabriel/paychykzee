@@ -31,7 +31,7 @@ export const Footer = () => {
         <div className="mt-[2em] flex flex-col items-center justify-center gap-5 font-br-light text-text lg:flex-row">
           <div className="flex items-center gap-2">
             <img src={mail} alt="mail-icon" />
-            hello@paychykzee.com
+            info@paychykzee.com
           </div>
           <div className="flex items-center gap-2">
             <img src={mobile} alt="mobile-icon" />
@@ -39,7 +39,7 @@ export const Footer = () => {
           </div>
           <div className="flex items-center gap-2">
             <img src={location} alt="mobile-icon" />
-            Lagos,Nigeria.
+            London, United Kingdom.
           </div>
         </div>
         <hr className="border-1 mt-[2em] border-line" />
