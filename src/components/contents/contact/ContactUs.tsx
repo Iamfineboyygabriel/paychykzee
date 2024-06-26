@@ -31,7 +31,7 @@ const ContactUs = () => {
     setIsModalOpen(false);
   };
 
-  const PublicCotact = async (event: React.FormEvent) => {
+  const PublicContact = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
     const endpoint = `${process.env.REACT_APP_API_URL}/users/contact-us`;
@@ -77,7 +77,7 @@ const ContactUs = () => {
         <section>
           <form
             className="m-auto mt-[2em] border border-border px-[1.5em] py-[2em] text-text lg:w-[70%] lg:px-[5em]"
-            onSubmit={PublicCotact}
+            onSubmit={PublicContact}
           >
             <div className="flex flex-col gap-3">
               <label htmlFor="name">First Name</label>
@@ -126,6 +126,7 @@ const ContactUs = () => {
             </div>
             <div className="mt-[1.5em]">
               <button.PrimaryButton
+              onClick={PublicContact}
                 className={`w-full ${!isFormValid ? "bg-disabledPrimary text-gray-500" : "text-white"}`}
                 disabled={!isFormValid || loading}
               >
