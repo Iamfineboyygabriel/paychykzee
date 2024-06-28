@@ -17,6 +17,7 @@ import exclamation from "../../../../assets/svg/exclamation.svg";
 interface Currency {
   name: string;
   code: string;
+  url: string;
 }
 
 interface RateResponse {
@@ -57,6 +58,8 @@ const Peer = () => {
   const currencyList = useSelector(
     (state: any) => state.transaction.getCurrencies,
   );
+
+  console.log("currencyList", currencyList);
 
   const handleBaseCurrencySelect = (currency: any) => {
     setBaseCurrency(currency);
@@ -284,8 +287,17 @@ const Peer = () => {
                           />
                           <span className="ml-2">Loading...</span>
                         </div>
+                      ) : baseCurrency ? (
+                        <div className="flex items-center">
+                          <img
+                            src={baseCurrency.url}
+                            alt={baseCurrency.code}
+                            className="mr-2 h-6 w-6 rounded-full"
+                          />
+                          <span>{baseCurrency.name}</span>
+                        </div>
                       ) : (
-                        baseCurrency?.name || "Select base currency"
+                        "Select base currency"
                       )}
                     </button>
                     {isBaseDropdownOpen && (
@@ -299,6 +311,11 @@ const Peer = () => {
                             className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                             onClick={() => handleBaseCurrencySelect(currency)}
                           >
+                            <img
+                              src={currency.url}
+                              alt={currency.code}
+                              className="mr-2 h-6 w-6"
+                            />
                             {currency?.name}
                           </div>
                         ))}
@@ -363,8 +380,17 @@ const Peer = () => {
                           />
                           <span className="ml-2">Loading...</span>
                         </div>
+                      ) : pairCurrency ? (
+                        <div className="flex items-center">
+                          <img
+                            src={pairCurrency.url}
+                            alt={pairCurrency.code}
+                            className="mr-2 h-6 w-6"
+                          />
+                          {pairCurrency.name}
+                        </div>
                       ) : (
-                        pairCurrency?.name || "Select pair currency"
+                        "Select pair currency"
                       )}
                     </button>
                     {isPairDropdownOpen && (
@@ -378,7 +404,12 @@ const Peer = () => {
                             className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                             onClick={() => handlePeerCurrencySelect(currency)}
                           >
-                            {currency?.name}
+                            <img
+                              src={currency.url}
+                              alt={currency.code}
+                              className="mr-2 h-6 w-6"
+                            />
+                            {currency.name}
                           </div>
                         ))}
                       </div>

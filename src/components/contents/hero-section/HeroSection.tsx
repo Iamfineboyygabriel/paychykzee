@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { button } from "../../../shared/button/button";
-import card from "../../../assets/svg/hero-card.svg";
+import card from "../../../assets/png/hero-card.png";
 
 const HeroSection = () => {
   const navigate = useNavigate();

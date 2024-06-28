@@ -22,6 +22,7 @@ interface Country {
 interface Currency {
   name: string;
   code: string;
+  url: string;
 }
 
 interface Billp {
@@ -377,14 +378,23 @@ const BillPayment = () => {
                         />
                         <span className="ml-2">Loading...</span>
                       </div>
+                    ) : currency ? (
+                      <div className="flex items-center">
+                        <img
+                          src={currency.url}
+                          alt={currency.code}
+                          className="mr-2 h-6 w-6"
+                        />
+                        {currency.name}
+                      </div>
                     ) : (
-                      currency?.name || "Select currency"
+                      "Select currency"
                     )}
                   </button>
                   {isCurrencyDropdown && (
                     <div
                       ref={dropdownRef}
-                      className="absolute z-10 mt-2 max-h-[170px] w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input "
+                      className="absolute z-10 mt-2 max-h-[170px] w-full overflow-auto rounded-lg border-[2px] border-border bg-inherit bg-input"
                     >
                       {currencyList?.data?.map((currency: any) => (
                         <div
@@ -392,13 +402,19 @@ const BillPayment = () => {
                           className="flex cursor-pointer items-center p-2 hover:bg-purpleblack"
                           onClick={() => handleBaseCurrencySelect(currency)}
                         >
-                          {currency?.name}
+                          <img
+                            src={currency.url}
+                            alt={currency.code}
+                            className="mr-2 h-6 w-6"
+                          />
+                          {currency.name}
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
               </div>
+
               <div className="w-full">
                 <label
                   htmlFor="amount"

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import card from "../../../assets/png/exhange.png";
+import card from "../../../assets/png/exchange.png";
 import { button } from "../../../shared/button/button";
 
 const GetStarted = () => {

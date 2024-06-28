@@ -126,7 +126,7 @@ const ContactUs = () => {
             </div>
             <div className="mt-[1.5em]">
               <button.PrimaryButton
-              onClick={PublicContact}
+                onClick={PublicContact}
                 className={`w-full ${!isFormValid ? "bg-disabledPrimary text-gray-500" : "text-white"}`}
                 disabled={!isFormValid || loading}
               >
